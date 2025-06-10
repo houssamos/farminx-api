@@ -1,6 +1,5 @@
 // src/repositories/stats.repository.js
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require('../config/prisma');
 
 exports.upsertStat = async ({ regionId, productId, year, surface, rendement, production }) => {
   const existing = await prisma.agricultural_stats.findFirst({
