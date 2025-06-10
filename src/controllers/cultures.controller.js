@@ -1,9 +1,16 @@
 const culturesService = require("../services/cultures.service");
+const CultureDto = require("../dtos/culture.dto");
+
+function modelToDto(model) {
+    return new CultureDto({ name: model.name });
+}
+
+exports.toDto = modelToDto;
 
 exports.getAllCultures = async (req, res) => {
     try {
         const cultures = await culturesService.getAllCultures();
-        res.json(cultures);
+        res.json(cultures.map(modelToDto));
     } catch (err) {
         res.status(500).json({ error: "Erreur lors de la récupération des cultures" });
     }
