@@ -1,5 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require('../config/prisma');
 
 exports.findAll = async () => {
     return await prisma.regions.findMany();
