@@ -1,0 +1,210 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Farminx Stats API",
+    "version": "1.0.0",
+    "description": "API pour l'affichage de statistiques agricoles filtr\u00e9es par r\u00e9gion, culture et ann\u00e9e."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api",
+      "description": "Serveur local"
+    }
+  ],
+  "paths": {
+    "/regions": {
+      "get": {
+        "summary": "Liste des r\u00e9gions",
+        "tags": [
+          "R\u00e9gions"
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des r\u00e9gions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Region"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cultures": {
+      "get": {
+        "summary": "Liste des cultures",
+        "tags": [
+          "Cultures"
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des cultures disponibles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cultures/years": {
+      "get": {
+        "summary": "Liste des ann\u00e9es disponibles",
+        "tags": [
+          "Cultures"
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des ann\u00e9es disponibles",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stats/regions/cultures/{culture}/years/{year}": {
+      "get": {
+        "summary": "Statistiques par r\u00e9gion",
+        "tags": [
+          "Statistiques"
+        ],
+        "parameters": [
+          {
+            "name": "culture",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "year",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des statistiques par r\u00e9gion pour une culture et une ann\u00e9e donn\u00e9e",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AgriculturalStat"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/import": {
+      "post": {
+        "summary": "Importer un fichier Excel (Feuille COP)",
+        "tags": ["Import"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Importation réussie" },
+          "400": { "description": "Fichier manquant" },
+          "500": { "description": "Erreur serveur" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Region": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "code": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "AgriculturalStat": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "year": {
+            "type": "integer"
+          },
+          "surfaceHa": {
+            "type": "number"
+          },
+          "yieldQxHa": {
+            "type": "number"
+          },
+          "productionT": {
+            "type": "number"
+          },
+          "granularity": {
+            "type": "string"
+          },
+          "region": {
+            "$ref": "#/components/schemas/Region"
+          },
+          "product": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,104 @@
+// schema.prisma aligné avec le schéma SQL existant
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model regions {
+  id     Int      @id @default(autoincrement())
+  code   String   @unique
+  name   String
+  departments departments[]
+  agricultural_stats agricultural_stats[]
+}
+
+model departments {
+  id        Int     @id @default(autoincrement())
+  code      String  @unique
+  name      String
+  region_id Int
+  regions   regions @relation(fields: [region_id], references: [id])
+  agricultural_stats agricultural_stats[]
+  announcements announcements[]
+}
+
+model products {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  category    String
+  unit        String   @default("tonne")
+  code        String?  @unique
+  agricultural_stats agricultural_stats[]
+  price_index price_index[]
+  announcements announcements[]
+}
+
+model agricultural_stats {
+  id            Int      @id @default(autoincrement())
+  year          Int
+  region_id     Int?
+  department_id Int?
+  product_id    Int?
+  surface_ha    Float?
+  yield_qx_ha   Float?
+  production_t  Float?
+  granularity   String
+  regions       regions?   @relation(fields: [region_id], references: [id])
+  departments   departments? @relation(fields: [department_id], references: [id])
+  products      products?  @relation(fields: [product_id], references: [id])
+}
+
+model price_index {
+  id           Int      @id @default(autoincrement())
+  product_id   Int
+  date         DateTime
+  price_euro_t Float
+  source       String
+  products     products @relation(fields: [product_id], references: [id])
+}
+
+model users {
+  id            Int     @id @default(autoincrement())
+  email         String  @unique
+  password_hash String
+  first_name    String?
+  last_name     String?
+  role          String  @default("user")
+  created_at    DateTime @default(now())
+  announcements announcements[]
+  favorites     favorites[]
+}
+
+model announcements {
+  id            Int     @id @default(autoincrement())
+  user_id       Int
+  product_id    Int
+  department_id Int?
+  title         String
+  description   String?
+  price         Float?
+  unit          String  @default("tonne")
+  quantity      Float?
+  status        String  @default("active")
+  created_at    DateTime @default(now())
+  users         users    @relation(fields: [user_id], references: [id])
+  products      products @relation(fields: [product_id], references: [id])
+  departments   departments? @relation(fields: [department_id], references: [id])
+  favorites     favorites[]
+}
+
+model favorites {
+  id              Int     @id @default(autoincrement())
+  user_id         Int
+  announcement_id Int
+  created_at      DateTime @default(now())
+  users           users        @relation(fields: [user_id], references: [id])
+  announcements   announcements @relation(fields: [announcement_id], references: [id])
+
+  @@unique([user_id, announcement_id])
+}
