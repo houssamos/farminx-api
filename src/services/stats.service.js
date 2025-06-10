@@ -9,7 +9,7 @@ function entityToModel(entity) {
         ? new Region({ id: entity.region.id, code: entity.region.code, name: entity.region.name })
         : undefined;
     const product = entity.product
-        ? new Culture({ id: entity.product.id, name: entity.product.name })
+        ? new Culture({ id: entity.product.id, name: entity.product.name, code: entity.product.code })
         : undefined;
     return new Stat({
         id: entity.id,

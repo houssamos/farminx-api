@@ -3,7 +3,7 @@ const Culture = require("../models/culture.model");
 
 function entityToModel(entity) {
     if (!entity) return null;
-    return new Culture({ id: entity.id, name: entity.name });
+    return new Culture({ id: entity.id, name: entity.name, code: entity.code });
 }
 
 exports.toModel = entityToModel;

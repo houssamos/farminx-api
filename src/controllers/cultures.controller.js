@@ -2,7 +2,7 @@ const culturesService = require("../services/cultures.service");
 const CultureDto = require("../dtos/culture.dto");
 
 function modelToDto(model) {
-    return new CultureDto({ name: model.name });
+    return new CultureDto({ id: model.id, name: model.name, code: model.code });
 }
 
 exports.toDto = modelToDto;

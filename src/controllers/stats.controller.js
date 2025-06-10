@@ -19,7 +19,7 @@ exports.toDto = modelToDto;
 exports.getStatsByRegion = async (req, res) => {
     const { culture, year } = req.params;
     try {
-        const stats = await statsService.getStatsByRegion(culture, parseInt(year));
+        const stats = await statsService.getStatsByRegion(parseInt(culture), parseInt(year));
         res.json(stats.map(modelToDto));
     } catch (err) {
         res.status(500).json({ error: "Erreur lors de la récupération des statistiques" });

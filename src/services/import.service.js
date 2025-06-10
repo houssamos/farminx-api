@@ -15,19 +15,20 @@ exports.importFromExcelBuffer = async (buffer) => {
   });
 
   const libRegCol = headers['LIB_REG2'] || 1;
-  const libCodeCol = headers['LIB_CODE'] || 2;
+  const libSaaCol = headers['LIB_SAA'] || headers['LIB_CODE'] || 2;
 
   for (let rowNumber = 7; rowNumber <= worksheet.lastRow.number; rowNumber++) {
     const row = worksheet.getRow(rowNumber);
 
     const libReg = row.getCell(libRegCol).value;
-    const libCode = row.getCell(libCodeCol).value;
+    const libSaa = row.getCell(libSaaCol).value;
 
-    if (!libReg || !libCode) continue;
+    if (!libReg || !libSaa) continue;
 
-    const cultureString = libCode.toString().trim();
-    const cultureMatch = cultureString.match(/^\d+ - (.+)$/);
-    const productName = cultureMatch ? cultureMatch[1] : cultureString;
+    const cultureString = libSaa.toString().trim();
+    const productParts = cultureString.split(' - ');
+    const productName = productParts ? productParts[1].trim() : cultureString;
+    const productCode = productParts ? productParts[0].trim() : "-1";
 
     const regionString = libReg.toString().trim();
     const regionParts = regionString.split(' - ');
@@ -37,9 +38,9 @@ exports.importFromExcelBuffer = async (buffer) => {
     const regionName = regionParts[1].trim();
 
     const region = await regionRepo.upsertRegionByName(regionName, regionCode);
-    const product = await productRepo.upsertProduct({ name: productName, category: "COP", unit: "tonne" });
+    const product = await productRepo.upsertProduct({ name: productName, category: "COP", unit: "quintal", code: productCode });
 
-    for (let year = 2010; year <= 2024; year++) {
+    for (let year = 2010; year <= 2024; year++) { //TODO: automatique year
       const surface = parseValue(row.getCell(headers[`SURF_${year}`]));
       const rendement = parseValue(row.getCell(headers[`REND_${year}`]));
       const production = parseValue(row.getCell(headers[`PROD_${year}`]));

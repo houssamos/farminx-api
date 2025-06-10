@@ -2,7 +2,7 @@ const prisma = require('../config/prisma');
 
 exports.findAll = async () => {
     return await prisma.products.findMany({
-        select: { name: true }
+        select: { name: true, id: true, code: true }
     });
 };
 

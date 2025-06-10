@@ -9,7 +9,9 @@
     "prisma": "prisma",
     "generate": "npx prisma generate",
     "migrate": "npx prisma migrate dev",
-    "seed": "node prisma/seed.js"
+    "seed": "node prisma/seed.js",
+    "prisma:init": "dotenv -e .env -- npx prisma migrate dev --name init",
+    "db:reset": "dotenv -e .env -- npx prisma migrate reset --force"
   },
   "dependencies": {
     "cors": "^2.8.5",
