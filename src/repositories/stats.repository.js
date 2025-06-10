@@ -35,3 +35,19 @@ exports.upsertStat = async ({ regionId, productId, year, surface, rendement, pro
     });
   }
 };
+
+exports.findStatsByRegion = async (culture, year) => {
+  return await prisma.agricultural_stats.findMany({
+    where: {
+      year,
+      granularity: 'region',
+      products: {
+        name: culture,
+      },
+    },
+    include: {
+      regions: true,
+      products: { select: { name: true } },
+    },
+  });
+};
