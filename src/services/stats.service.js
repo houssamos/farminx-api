@@ -2,8 +2,9 @@ const statsRepository = require("../repositories/stats.repository");
 const Stat = require("../models/stat.model");
 const Region = require("../models/region.model");
 const Culture = require("../models/culture.model");
+const ProductSummary = require("../models/product-summary.model");
 
-function entityToModel(entity) {
+function statEntityToModel(entity) {
     if (!entity) return null;
     const region = entity.regions
         ? new Region({ id: entity.regions.id, code: entity.regions.code, name: entity.regions.name })
@@ -23,14 +24,40 @@ function entityToModel(entity) {
     });
 }
 
-exports.toModel = entityToModel;
+exports.statEntityToModel = statEntityToModel;
+
+function productSummaryEntityToModel(entity) {
+    if (!entity) return null;
+    return new ProductSummary({
+        productId: entity.productId,
+        name: entity.name,
+        totalSurface: entity.totalSurface,
+        avgYield: entity.avgYield,
+        totalProduction: entity.totalProduction,
+        minYear: entity.minYear,
+        maxYear: entity.maxYear
+    });
+}
+
+exports.productSummaryEntityToModel = productSummaryEntityToModel;
+
+exports.getFilteredStats = async (filters) => {
+  const result = await statsRepository.getFilteredStats(filters);
+  return {
+    total: result.total,
+    page: result.page,
+    limit: result.limit,
+    data: result.data.map(statEntityToModel)
+  };
+};
 
 exports.getStatsByRegion = async (productId, year) => {
     const entities = await statsRepository.findStatsByRegion(productId, year);
-    return entities.map(entityToModel);
+    return entities.map(statByRegionEntityToModel);
 };
 
 exports.getProductSummary = async (productId, year) => {
-    return await statsRepository.getSummaryByProduct(productId, year);
+    const entity = await statsRepository.getSummaryByProduct(productId, year);
+    return productSummaryEntityToModel(entity);
 };
   

@@ -1,6 +1,35 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
+exports.getFilteredStats = async ({ year, regionId, productId, granularity, page = 1, limit = 50 }) => {
+  const where = {
+    ...(year ? { year } : {}),
+    ...(regionId ? { region_id: regionId } : {}),
+    ...(productId ? { product_id: productId } : {}),
+    ...(granularity ? { granularity } : {})
+  };
+
+  const results = await prisma.agricultural_stats.findMany({
+    where,
+    include: {
+      regions: true,
+      products: true
+    },
+    skip: (page - 1) * limit,
+    take: limit,
+    orderBy: { year: "desc" }
+  });
+
+  const total = await prisma.agricultural_stats.count({ where });
+
+  return {
+    total,
+    page,
+    limit,
+    data: results
+  };
+};
+
 exports.findStatsByRegion = async (productId, year) => {
     const query = {
         product_id: productId,

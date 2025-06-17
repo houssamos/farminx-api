@@ -2,7 +2,7 @@ const statsService = require("../services/stats.service");
 const StatDto = require("../dtos/stat.dto");
 const ProductSummaryDto = require("../dtos/product-summary.dto");
 
-function modelToDto(model) {
+function statModelToDto(model) {
     return new StatDto({
         id: model.id,
         year: model.year,
@@ -15,14 +15,38 @@ function modelToDto(model) {
     });
 }
 
-exports.toDto = modelToDto;
+exports.statModelToDto = statModelToDto;
+
+exports.getAgriculturalStats = async (req, res) => {
+  try {
+    const filters = {
+      year: req.query.year ? parseInt(req.query.year) : undefined,
+      regionId: req.query.regionId ? parseInt(req.query.regionId) : undefined,
+      productId: req.query.productId ? parseInt(req.query.productId) : undefined,
+      granularity: req.query.granularity,
+      page: parseInt(req.query.page) || 1,
+      limit: parseInt(req.query.limit) || 50
+    };
+
+    const result = await statsService.getFilteredStats(filters);
+    res.json({
+      total: result.total,
+      page: result.page,
+      limit: result.limit,
+      data: result.data.map(statModelToDto)
+    });
+  } catch (err) {
+    console.error("Erreur getAgriculturalStats:", err);
+    res.status(500).json({ error: "Erreur lors du filtrage des statistiques" });
+  }
+};
 
 exports.getStatsByRegion = async (req, res) => {
     const productId = parseInt(req.params.culture);
     const year = parseInt(req.params.year);
     try {
         const stats = await statsService.getStatsByRegion(parseInt(productId), parseInt(year));
-        res.json(stats.map(modelToDto));
+        res.json(stats.map(statModelToDto));
     } catch (err) {
         res.status(500).json({ error: "Erreur lors de la récupération des statistiques" });
     }

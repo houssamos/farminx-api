@@ -4,5 +4,6 @@ const statsController = require("../controllers/stats.controller");
 
 router.get("/regions/cultures/:culture/years/:year", statsController.getStatsByRegion);
 router.get("/products/:id/summary", statsController.getProductSummary);
+router.get("/", statsController.getAgriculturalStats);
 
 module.exports = router;
