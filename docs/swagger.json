@@ -127,6 +127,50 @@
         }
       }
     },
+    "/stats/products/{id}/summary": {
+      "get": {
+        "summary": "Résumé statistique pour un produit",
+        "tags": ["Statistiques"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer" },
+            "description": "Filtrer par année (optionnel)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Résumé global ou par année du produit",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "productId": { "type": "integer" },
+                    "name": { "type": "string" },
+                    "totalSurface": { "type": "number" },
+                    "avgYield": { "type": "number" },
+                    "totalProduction": { "type": "number" },
+                    "minYear": { "type": "integer" },
+                    "maxYear": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Paramètres invalides" },
+          "500": { "description": "Erreur serveur" }
+        }
+      }
+    },
     "/import": {
       "post": {
         "summary": "Importer un fichier Excel (Feuille COP)",

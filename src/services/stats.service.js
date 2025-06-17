@@ -5,11 +5,11 @@ const Culture = require("../models/culture.model");
 
 function entityToModel(entity) {
     if (!entity) return null;
-    const region = entity.region
-        ? new Region({ id: entity.region.id, code: entity.region.code, name: entity.region.name })
+    const region = entity.regions
+        ? new Region({ id: entity.regions.id, code: entity.regions.code, name: entity.regions.name })
         : undefined;
-    const product = entity.product
-        ? new Culture({ id: entity.product.id, name: entity.product.name, code: entity.product.code })
+    const product = entity.products
+        ? new Culture({ id: entity.products.id, name: entity.products.name, code: entity.products.code })
         : undefined;
     return new Stat({
         id: entity.id,
@@ -25,7 +25,12 @@ function entityToModel(entity) {
 
 exports.toModel = entityToModel;
 
-exports.getStatsByRegion = async (culture, year) => {
-    const entities = await statsRepository.findStatsByRegion(culture, year);
+exports.getStatsByRegion = async (productId, year) => {
+    const entities = await statsRepository.findStatsByRegion(productId, year);
     return entities.map(entityToModel);
 };
+
+exports.getProductSummary = async (productId, year) => {
+    return await statsRepository.getSummaryByProduct(productId, year);
+};
+  
