@@ -7,17 +7,23 @@ const regionsRoutes = require("./routes/regions.routes");
 const culturesRoutes = require("./routes/cultures.routes");
 const statsRoutes = require("./routes/stats.routes");
 const importRoutes = require("./routes/import.routes");
+const authRoutes = require("./routes/auth.routes");
+const authMiddleware = require("./middlewares/auth.middleware");
 
 const app = express();
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
+app.use("/api/auth", authRoutes);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(require("../docs/swagger.json")));
+
+app.use(authMiddleware);
+
 app.use("/api/regions", regionsRoutes);
 app.use("/api/cultures", culturesRoutes);
 app.use("/api/stats", statsRoutes);
 app.use("/api/import", importRoutes);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(require("../docs/swagger.json")));
 
 app.get("/", (req, res) => res.send("Bienvenue sur l'API Farminx Stats"));
 
