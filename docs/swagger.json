@@ -271,7 +271,7 @@
     "/auth/login": {
       "post": {
         "summary": "Connexion utilisateur",
-        "tags": ["Auth"],
+        "tags": ["Authentification"],
         "requestBody": {
           "required": true,
           "content": {
@@ -304,6 +304,52 @@
         }
       }
     },
+    "/auth/register": {
+  "post": {
+    "summary": "Créer un nouvel utilisateur",
+    "tags": ["Authentification"],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "required": ["email", "password"],
+            "properties": {
+              "email": { "type": "string", "format": "email" },
+              "password": { "type": "string", "minLength": 6 },
+              "firstName": { "type": "string" },
+              "lastName": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "201": {
+        "description": "Utilisateur créé avec succès",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "integer" },
+                "email": { "type": "string", "format": "email" }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Requête invalide (email ou mot de passe manquant)"
+      },
+      "500": {
+        "description": "Erreur interne lors de la création"
+      }
+    }
+  }
+},
+
     "/import": {
       "post": {
         "summary": "Importer un fichier Excel (Feuille COP)",
