@@ -11,6 +11,9 @@
       "description": "Serveur local"
     }
   ],
+  "security": [
+    { "bearerAuth": [] }
+  ],
   "paths": {
     "/regions": {
       "get": {
@@ -265,6 +268,42 @@
         }
       }
     },
+    "/auth/login": {
+      "post": {
+        "summary": "Connexion utilisateur",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": { "type": "string" },
+                  "password": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Token JWT",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "description": "Identifiants invalides" }
+        }
+      }
+    },
     "/import": {
       "post": {
         "summary": "Importer un fichier Excel (Feuille COP)",
@@ -294,6 +333,13 @@
     }
   },
   "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
     "schemas": {
       "Region": {
         "type": "object",

@@ -21,6 +21,7 @@ Copier `.env.example` vers `.env` et adapter les variables si besoin :
 ```env
 DATABASE_URL=postgresql://user:password@localhost:5432/farminx
 PORT=3000
+JWT_SECRET=changeme
 ```
 
 ### 4. Générer le client Prisma
@@ -86,8 +87,22 @@ package.json       # Scripts, dépendances
 
 ---
 
+## 🔐 Authentification
+
+Toutes les routes (sauf `/api/auth` et `/api-docs`) nécessitent un token JWT.
+
+### Obtenir un token
+
+```
+POST /api/auth/login
+{ "email": "user@example.com", "password": "votre_mot_de_passe" }
+```
+
+Le token doit ensuite être envoyé dans l'en-tête `Authorization: Bearer <token>`.
+
+---
+
 ## 📦 Prochaines étapes
-- Authentification JWT
 - Filtres départements
 - Dockerisation
 - Fichiers de seed
