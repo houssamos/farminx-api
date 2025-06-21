@@ -53,7 +53,7 @@ exports.getFilteredStats = async (filters) => {
 
 exports.getStatsByRegion = async (productId, year) => {
     const entities = await statsRepository.findStatsByRegion(productId, year);
-    return entities.map(statByRegionEntityToModel);
+    return entities.map(statEntityToModel);
 };
 
 exports.getProductSummary = async (productId, year) => {

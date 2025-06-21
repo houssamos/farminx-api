@@ -213,6 +213,58 @@
         }
       }
     },
+    "/stats/regions/{id}/products": {
+      "get": {
+        "summary": "Statistiques par produit pour une région",
+        "tags": ["Statistiques"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des produits avec stats par année pour une région",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "product": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "integer" },
+                          "name": { "type": "string" },
+                          "code": { "type": "string" }
+                        }
+                      },
+                      "stats": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "year": { "type": "integer" },
+                            "surfaceHa": { "type": "number" },
+                            "yieldQxHa": { "type": "number" },
+                            "productionT": { "type": "number" }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": { "description": "Erreur serveur" }
+        }
+      }
+    },
     "/import": {
       "post": {
         "summary": "Importer un fichier Excel (Feuille COP)",
