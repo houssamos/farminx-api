@@ -4,9 +4,6 @@ const {
   productSummaryEntityToModel,
 } = require("../mapping/stat.mapping");
 
-exports.statEntityToModel = statEntityToModel;
-exports.productSummaryEntityToModel = productSummaryEntityToModel;
-
 exports.getFilteredStats = async (filters) => {
   const result = await statsRepository.getFilteredStats(filters);
   return {
