@@ -2,8 +2,6 @@ const statsService = require("../services/stats.service");
 const { statModelToDto } = require("../mapping/stat.mapping");
 const ProductSummaryDto = require("../dtos/product-summary.dto");
 
-exports.statModelToDto = statModelToDto;
-
 exports.getAgriculturalStats = async (req, res) => {
   try {
     const filters = {
