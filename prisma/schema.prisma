@@ -10,7 +10,7 @@ datasource db {
 }
 
 model regions {
-  id     Int      @id @default(autoincrement())
+  id String @id @default(uuid()) @db.Uuid
   code   String   @unique
   name   String
   departments departments[]
@@ -18,17 +18,17 @@ model regions {
 }
 
 model departments {
-  id        Int     @id @default(autoincrement())
+  id String @id @default(uuid()) @db.Uuid
   code      String  @unique
   name      String
-  region_id Int
+  region_id String @db.Uuid
   regions   regions @relation(fields: [region_id], references: [id])
   agricultural_stats agricultural_stats[]
   announcements announcements[]
 }
 
 model products {
-  id          Int      @id @default(autoincrement())
+  id String @id @default(uuid()) @db.Uuid
   name        String   @unique
   category    String
   unit        String   @default("tonne")
@@ -39,11 +39,11 @@ model products {
 }
 
 model agricultural_stats {
-  id            Int      @id @default(autoincrement())
+  id String @id @default(uuid()) @db.Uuid
   year          Int
-  region_id     Int?
-  department_id Int?
-  product_id    Int?
+  region_id     String? @db.Uuid
+  department_id String? @db.Uuid
+  product_id    String? @db.Uuid
   surface_ha    Float?
   yield_qx_ha   Float?
   production_t  Float?
@@ -54,8 +54,8 @@ model agricultural_stats {
 }
 
 model price_index {
-  id           Int      @id @default(autoincrement())
-  product_id   Int
+  id String @id @default(uuid()) @db.Uuid
+  product_id   String @db.Uuid
   date         DateTime
   price_euro_t Float
   source       String
@@ -63,7 +63,7 @@ model price_index {
 }
 
 model users {
-  id            Int     @id @default(autoincrement())
+  id String @id @default(uuid()) @db.Uuid
   email         String  @unique
   password_hash String
   first_name    String?
@@ -75,10 +75,10 @@ model users {
 }
 
 model announcements {
-  id            Int     @id @default(autoincrement())
-  user_id       Int
-  product_id    Int
-  department_id Int?
+  id String @id @default(uuid()) @db.Uuid
+  user_id       String @db.Uuid
+  product_id    String @db.Uuid
+  department_id String? @db.Uuid
   title         String
   description   String?
   price         Float?
@@ -93,12 +93,20 @@ model announcements {
 }
 
 model favorites {
-  id              Int     @id @default(autoincrement())
-  user_id         Int
-  announcement_id Int
+  id String @id @default(uuid()) @db.Uuid
+  user_id         String @db.Uuid
+  announcement_id String @db.Uuid
   created_at      DateTime @default(now())
   users           users        @relation(fields: [user_id], references: [id])
   announcements   announcements @relation(fields: [announcement_id], references: [id])
 
   @@unique([user_id, announcement_id])
+}
+
+model api_app {
+  id String @id @default(uuid()) @db.Uuid
+  name      String   @unique
+  secret    String?
+  apiKey    String?   @unique
+  createdAt DateTime @default(now())
 }

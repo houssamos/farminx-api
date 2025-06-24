@@ -12,7 +12,8 @@
     }
   ],
   "security": [
-    { "bearerAuth": [] }
+    { "bearerAuth": [] },
+    { "apiKeyAuth": [] }
   ],
   "paths": {
     "/regions": {
@@ -349,7 +350,121 @@
     }
   }
 },
-
+"/auth/login-app": {
+  "post": {
+    "summary": "Connexion d'une application enregistrée",
+    "tags": ["Authentification"],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "required": ["name", "secret"],
+            "properties": {
+              "name": { "type": "string" },
+              "secret": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Token JWT pour application",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "401": { "description": "Identifiants invalides" }
+    }
+  }
+},
+"/auth/register-app": {
+  "post": {
+    "summary": "Enregistrement d'une nouvelle application",
+    "tags": ["Authentification"],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "required": ["name", "secret"],
+            "properties": {
+              "name": { "type": "string" },
+              "secret": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "201": {
+        "description": "Application enregistrée",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "integer" },
+                "name": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "400": { "description": "Requête invalide" },
+      "500": { "description": "Erreur serveur" }
+    }
+  }
+},
+"/auth/register-app-key": {
+  "post": {
+    "summary": "Enregistrer une application et générer une API Key",
+    "tags": ["Authentification"],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" }
+            },
+            "required": ["name"]
+          }
+        }
+      }
+    },
+    "responses": {
+      "201": {
+        "description": "Clé API générée avec succès",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "string" },
+                "name": { "type": "string" },
+                "apiKey": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "400": { "description": "Nom manquant" },
+      "500": { "description": "Erreur serveur" }
+    }
+  }
+},
     "/import": {
       "post": {
         "summary": "Importer un fichier Excel (Feuille COP)",
@@ -384,6 +499,11 @@
         "type": "http",
         "scheme": "bearer",
         "bearerFormat": "JWT"
+      },
+      "apiKeyAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key"
       }
     },
     "schemas": {
