@@ -1,9 +1,5 @@
 const regionsService = require("../services/regions.service");
-const RegionDto = require("../dtos/region.dto");
-
-function modelToDto(model) {
-    return new RegionDto({ id: model.id, code: model.code, name: model.name });
-}
+const { modelToDto } = require("../mapping/region.mapping");
 
 exports.toDto = modelToDto;
 

@@ -1,10 +1,5 @@
 const culturesRepository = require("../repositories/cultures.repository");
-const Culture = require("../models/culture.model");
-
-function entityToModel(entity) {
-    if (!entity) return null;
-    return new Culture({ id: entity.id, name: entity.name, code: entity.code });
-}
+const { entityToModel } = require("../mapping/culture.mapping");
 
 exports.toModel = entityToModel;
 

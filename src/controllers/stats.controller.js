@@ -1,19 +1,6 @@
 const statsService = require("../services/stats.service");
-const StatDto = require("../dtos/stat.dto");
+const { statModelToDto } = require("../mapping/stat.mapping");
 const ProductSummaryDto = require("../dtos/product-summary.dto");
-
-function statModelToDto(model) {
-    return new StatDto({
-        id: model.id,
-        year: model.year,
-        surfaceHa: model.surfaceHa,
-        yieldQxHa: model.yieldQxHa,
-        productionT: model.productionT,
-        granularity: model.granularity,
-        region: model.region,
-        product: model.product,
-    });
-}
 
 exports.statModelToDto = statModelToDto;
 
