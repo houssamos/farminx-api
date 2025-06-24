@@ -1,8 +1,6 @@
 const regionsService = require("../services/regions.service");
 const { modelToDto } = require("../mapping/region.mapping");
 
-exports.toDto = modelToDto;
-
 exports.getAllRegions = async (req, res) => {
     try {
         const regions = await regionsService.getAllRegions();
