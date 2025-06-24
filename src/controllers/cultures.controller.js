@@ -1,11 +1,5 @@
 const culturesService = require("../services/cultures.service");
-const CultureDto = require("../dtos/culture.dto");
-
-function modelToDto(model) {
-    return new CultureDto({ id: model.id, name: model.name, code: model.code });
-}
-
-exports.toDto = modelToDto;
+const { modelToDto } = require("../mapping/culture.mapping");
 
 exports.getAllCultures = async (req, res) => {
     try {

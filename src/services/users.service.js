@@ -1,17 +1,6 @@
 const bcrypt = require('bcryptjs');
 const usersRepository = require('../repositories/users.repository');
-const User = require('../models/user.model');
-
-function entityToModel(entity) {
-  if (!entity) return null;
-  return new User({
-    id: entity.id,
-    email: entity.email,
-    firstName: entity.first_name,
-    lastName: entity.last_name,
-    role: entity.role,
-  });
-}
+const { entityToModel } = require('../mapping/user.mapping');
 
 exports.authenticate = async (email, password) => {
   const user = await usersRepository.findByEmail(email);
