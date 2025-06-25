@@ -12,7 +12,8 @@
     "migrate": "npx prisma migrate dev",
     "seed": "node prisma/seed.js",
     "prisma:init": "dotenv -e .env -- npx prisma migrate dev --name init",
-    "db:reset": "dotenv -e .env -- npx prisma migrate reset --force"
+    "db:reset": "dotenv -e .env -- npx prisma migrate reset --force",
+    "test": "node --test"
   },
   "dependencies": {
     "@prisma/client": "^5.0.0",
