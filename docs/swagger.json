@@ -605,6 +605,66 @@
             }
           }
         }
+      },
+      "Geometry": {
+        "type": "object",
+        "required": ["type", "coordinates"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["Polygon", "MultiPolygon"]
+          },
+          "coordinates": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Culture": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "name": { "type": "string" },
+          "code": { "type": "string" }
+        }
+      },
+      "ProductSummary": {
+        "type": "object",
+        "properties": {
+          "productId": { "type": "string", "format": "uuid" },
+          "name": { "type": "string" },
+          "totalSurface": { "type": "number" },
+          "avgYield": { "type": "number" },
+          "totalProduction": { "type": "number" },
+          "minYear": { "type": "integer" },
+          "maxYear": { "type": "integer" }
+        }
+      },
+      "RegionProductStat": {
+        "type": "object",
+        "properties": {
+          "product": { "$ref": "#/components/schemas/Culture" },
+          "stats": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "year": { "type": "integer" },
+                "surfaceHa": { "type": "number" },
+                "yieldQxHa": { "type": "number" },
+                "productionT": { "type": "number" }
+              }
+            }
+          }
+        }
       }
     }
   }
