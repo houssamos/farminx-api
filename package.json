@@ -12,7 +12,9 @@
     "migrate": "npx prisma migrate dev",
     "seed": "node prisma/seed.js",
     "prisma:init": "dotenv -e .env -- npx prisma migrate dev --name init",
-    "db:reset": "dotenv -e .env -- npx prisma migrate reset --force"
+    "db:reset": "dotenv -e .env -- npx prisma migrate reset --force",
+    "lint": "eslint .",
+    "test": "jest"
   },
   "dependencies": {
     "@prisma/client": "^5.0.0",
@@ -28,6 +30,8 @@
     "swagger-ui-express": "^4.6.3"
   },
   "devDependencies": {
+    "eslint": "^9.29.0",
+    "jest": "^30.0.3",
     "nodemon": "^3.0.0"
   },
   "author": "",
