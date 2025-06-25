@@ -6,7 +6,6 @@ function entityToModel(entity) {
     return new Region({ id: entity.id, code: entity.code, name: entity.name });
 }
 
-exports.toModel = entityToModel;
 
 exports.getAllRegions = async () => {
     const entities = await regionsRepository.findAll();

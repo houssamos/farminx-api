@@ -6,7 +6,6 @@ function entityToModel(entity) {
     return new Culture({ id: entity.id, name: entity.name, code: entity.code });
 }
 
-exports.toModel = entityToModel;
 
 exports.getAllCultures = async () => {
     const entities = await culturesRepository.findAll();
