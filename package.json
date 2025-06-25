@@ -13,7 +13,12 @@
     "seed": "node prisma/seed.js",
     "prisma:init": "dotenv -e .env -- npx prisma migrate dev --name init",
     "db:reset": "dotenv -e .env -- npx prisma migrate reset --force",
+<<<<<<< codex/configurer-eslint-et-tests
+    "lint": "eslint .",
+    "test": "jest"
+=======
     "test": "node --test"
+>>>>>>> feature/first-test
   },
   "dependencies": {
     "@prisma/client": "^5.0.0",
@@ -29,6 +34,8 @@
     "swagger-ui-express": "^4.6.3"
   },
   "devDependencies": {
+    "eslint": "^9.29.0",
+    "jest": "^30.0.3",
     "nodemon": "^3.0.0"
   },
   "author": "",
