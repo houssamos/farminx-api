@@ -1,5 +1,10 @@
 const jwt = require('jsonwebtoken');
 const appsService = require('../services/apps.service');
+const {
+  tokenToLoginResponseDto,
+  appModelToRegisterResponseDto,
+  appModelToRegisterKeyResponseDto,
+} = require('../mapping/app.mapping');
 
 exports.loginApp = async (req, res) => {
   const { name, secret } = req.body;
@@ -12,7 +17,7 @@ exports.loginApp = async (req, res) => {
     expiresIn: '1h'
   });
 
-  res.json({ token });
+  res.json(tokenToLoginResponseDto(token));
 };
 
 exports.registerApp = async (req, res) => {
@@ -21,7 +26,7 @@ exports.registerApp = async (req, res) => {
 
   try {
     const app = await appsService.registerApp({ name, secret });
-    res.status(201).json({ id: app.id, name: app.name });
+    res.status(201).json(appModelToRegisterResponseDto(app));
   } catch (err) {
     console.error('Erreur lors de l\'enregistrement de l\'application:', err);
     res.status(500).json({ error: "Erreur lors de l'enregistrement de l'application" });
@@ -34,7 +39,7 @@ exports.registerAppApiKey = async (req, res) => {
 
   try {
     const result = await appsService.createAppWithApiKey(name);
-    res.status(201).json(result);
+    res.status(201).json(appModelToRegisterKeyResponseDto(result));
   } catch (err) {
     console.error('Erreur création app avec clé API:', err);
     res.status(500).json({ error: 'Erreur serveur' });

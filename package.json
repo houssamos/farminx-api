@@ -13,8 +13,12 @@
     "seed": "node prisma/seed.js",
     "prisma:init": "dotenv -e .env -- npx prisma migrate dev --name init",
     "db:reset": "dotenv -e .env -- npx prisma migrate reset --force",
+<<<<<<< codex/configurer-eslint-et-tests
     "lint": "eslint .",
     "test": "jest"
+=======
+    "test": "node --test"
+>>>>>>> feature/first-test
   },
   "dependencies": {
     "@prisma/client": "^5.0.0",

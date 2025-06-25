@@ -10,9 +10,18 @@ exports.importFromExcelBuffer = async (buffer) => {
 
   const headerRow = worksheet.getRow(6);
   const headers = {};
+  // Build a map of headers and extract available years from SURF_YYYY,
+  // REND_YYYY and PROD_YYYY columns
+  const yearsSet = new Set();
   headerRow.eachCell((cell, colNumber) => {
-    if (cell.value) headers[cell.value.toString().trim()] = colNumber;
+    if (cell.value) {
+      const header = cell.value.toString().trim();
+      headers[header] = colNumber;
+      const match = header.match(/(?:SURF|REND|PROD)_(\d{4})/);
+      if (match) yearsSet.add(parseInt(match[1], 10));
+    }
   });
+  const years = Array.from(yearsSet).sort();
 
   const libRegCol = headers['LIB_REG2'] || 1;
   const libSaaCol = headers['LIB_SAA'] || headers['LIB_CODE'] || 2;
@@ -40,7 +49,7 @@ exports.importFromExcelBuffer = async (buffer) => {
     const region = await regionRepo.upsertRegionByName(regionName, regionCode);
     const product = await productRepo.upsertProduct({ name: productName, category: "COP", unit: "quintal", code: productCode });
 
-    for (let year = 2010; year <= 2024; year++) { //TODO: automatique year
+    for (const year of years) { // years detected from header row
       const surface = parseValue(row.getCell(headers[`SURF_${year}`]));
       const rendement = parseValue(row.getCell(headers[`REND_${year}`]));
       const production = parseValue(row.getCell(headers[`PROD_${year}`]));
