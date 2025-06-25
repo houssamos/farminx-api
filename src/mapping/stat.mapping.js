@@ -4,6 +4,8 @@ const Region = require('../models/region.model');
 const Culture = require('../models/culture.model');
 const StatDto = require('../dtos/stat.dto');
 const ProductSummaryDto = require('../dtos/product-summary.dto');
+const { modelToDto: regionModelToDto } = require('./region.mapping');
+const { modelToDto: cultureModelToDto } = require('./culture.mapping');
 
 function statEntityToModel(entity) {
   if (!entity) return null;
@@ -47,8 +49,8 @@ function statModelToDto(model) {
     yieldQxHa: model.yieldQxHa,
     productionT: model.productionT,
     granularity: model.granularity,
-    region: model.region,
-    product: model.product,
+    region: regionModelToDto(model.region),
+    product: cultureModelToDto(model.product),
   });
 }
 
