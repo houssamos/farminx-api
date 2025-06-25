@@ -22,6 +22,7 @@ Copier `.env.example` vers `.env` et adapter les variables si besoin :
 DATABASE_URL=postgresql://user:password@localhost:5432/farminx
 PORT=3000
 JWT_SECRET=changeme
+DEBUG=false
 ```
 
 ### 4. Générer le client Prisma
