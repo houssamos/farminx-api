@@ -1,5 +1,4 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require('../config/prisma');
 
 exports.getFilteredStats = async ({ year, regionId, productId, granularity, page = 1, limit = 50 }) => {
   const where = {
