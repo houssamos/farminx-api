@@ -2,6 +2,7 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const StatEntity = require('../entities/stat.entity');
 const ProductSummaryEntity = require('../entities/product-summary.entity');
+const logger = require('../utils/logger');
 
 exports.getFilteredStats = async ({ year, regionId, productId, granularity, page = 1, limit = 50 }) => {
   const where = {
@@ -39,8 +40,8 @@ exports.findStatsByRegion = async (productId, year) => {
     granularity: 'region'
   };
     
-      console.log("Recherche Prisma :", query);
-
+ logger.debug("Recherche Prisma :", query);
+  
   const results = await prisma.agricultural_stats.findMany({
     where: {
       product_id: productId,
@@ -52,7 +53,7 @@ exports.findStatsByRegion = async (productId, year) => {
       products: true
     }
   });
-  console.log("Résultats :", results);
+  logger.debug("Résultats :", results);
   return results.map((row) => new StatEntity(row));
 };
 

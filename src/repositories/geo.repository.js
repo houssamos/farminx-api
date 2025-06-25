@@ -1,5 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('../config/prisma');
 
 exports.getStatsByRegion = async ({ year, productId }) => {
   const rows = await prisma.agricultural_stats.findMany({
