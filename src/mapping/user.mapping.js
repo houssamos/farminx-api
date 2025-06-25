@@ -1,4 +1,5 @@
 const User = require('../models/user.model');
+const UserEntity = require('../entities/user.entity');
 
 function entityToModel(entity) {
   if (!entity) return null;

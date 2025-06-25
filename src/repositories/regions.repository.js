@@ -1,13 +1,16 @@
 const prisma = require('../config/prisma');
+const RegionEntity = require('../entities/region.entity');
 
 exports.findAll = async () => {
-    return await prisma.regions.findMany();
+  const rows = await prisma.regions.findMany();
+  return rows.map((row) => new RegionEntity(row));
 };
 
 exports.upsertRegionByName = async (name, code) => {
-    return await prisma.regions.upsert({
-      where: { code },
-      update: {},
-      create: { code, name }
-    });
-  };
+  const row = await prisma.regions.upsert({
+    where: { code },
+    update: {},
+    create: { code, name },
+  });
+  return new RegionEntity(row);
+};

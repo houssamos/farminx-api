@@ -4,6 +4,8 @@ const Region = require('../models/region.model');
 const Culture = require('../models/culture.model');
 const StatDto = require('../dtos/stat.dto');
 const ProductSummaryDto = require('../dtos/product-summary.dto');
+const StatEntity = require('../entities/stat.entity');
+const ProductSummaryEntity = require('../entities/product-summary.entity');
 
 function statEntityToModel(entity) {
   if (!entity) return null;
