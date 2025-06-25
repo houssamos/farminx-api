@@ -79,12 +79,18 @@ package.json       # Scripts, dépendances
 
 ## 🛠 Endpoints disponibles
 
-| Verbe | URL                                                       | Description                                  |
-|-------|------------------------------------------------------------|----------------------------------------------|
-| GET   | `/api/regions`                                            | Liste des régions                            |
-| GET   | `/api/cultures`                                           | Liste des cultures                           |
-| GET   | `/api/cultures/years`                                     | Années disponibles                           |
-| GET   | `/api/stats/regions/cultures/:culture/years/:year`        | Stats par région pour une culture et année  |
+| Verbe | URL | Paramètres | Retour (DTO) | Description |
+|-------|------------------------------------------------------------|-----------------------------|-------------------------------------------------------------|--------------------------------------------|
+| GET   | `/api/regions` | - | `RegionDto[]` | Liste des régions |
+| GET   | `/api/cultures` | - | `CultureDto[]` | Liste des cultures |
+| GET   | `/api/cultures/years` | - | `number[]` | Années disponibles |
+| GET   | `/api/stats` | `year?`, `regionId?`, `productId?`, `granularity?`, `page?`, `limit?` | `{ total, page, limit, data: AgriculturalStatDto[] }` | Stats filtrées |
+| GET   | `/api/stats/regions/cultures/:culture/years/:year` | `culture` (ID), `year` | `AgriculturalStatDto[]` | Stats par région |
+| GET   | `/api/stats/products/:id/summary` | `id` (path), `year?` (query) | `ProductSummaryDto` | Résumé pour un produit |
+| GET   | `/api/stats/regions` | `year`, `productId` | `FeatureCollection` | Stats régionales en GeoJSON |
+| POST  | `/api/auth/login` | JSON `{ email, password }` | `{ token }` | Connexion utilisateur |
+| POST  | `/api/auth/register` | JSON `{ email, password, firstName?, lastName? }` | `{ id, email }` | Création d'utilisateur |
+| POST  | `/api/import` | Form-data `file` | `{ message }` | Importer des données Excel |
 
 ---
 
