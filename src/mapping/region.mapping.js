@@ -1,5 +1,6 @@
 const Region = require('../models/region.model');
 const RegionDto = require('../dtos/region.dto');
+const RegionEntity = require('../entities/region.entity');
 
 function entityToModel(entity) {
   if (!entity) return null;

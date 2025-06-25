@@ -1,4 +1,5 @@
 const User = require('../models/user.model');
+const UserEntity = require('../entities/user.entity');
 const LoginResponseDto = require('../dtos/login-response.dto');
 const RegisterResponseDto = require('../dtos/register-response.dto');
 
