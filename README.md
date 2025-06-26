@@ -81,27 +81,27 @@ package.json       # Scripts, dépendances
 
 | Verbe | URL | Paramètres | Retour (DTO) | Description |
 |-------|------------------------------------------------------------|-----------------------------|-------------------------------------------------------------|--------------------------------------------|
-| GET   | `/api/regions` | - | `RegionDto[]` | Liste des régions |
-| GET   | `/api/cultures` | - | `CultureDto[]` | Liste des cultures |
-| GET   | `/api/cultures/years` | - | `number[]` | Années disponibles |
-| GET   | `/api/stats` | `year?`, `regionId?`, `cultureId?`, `granularity?`, `page?`, `limit?` | `{ total, page, limit, data: AgriculturalStatDto[] }` | Stats filtrées |
-| GET   | `/api/stats/regions/cultures/:cultureId/years/:year` | `cultureId` (ID), `year` | `AgriculturalStatDto[]` | Stats par région |
-| GET   | `/api/stats/cultures/:cultureId/summary` | `cultureId` (path), `year?` (query) | `CultureSummaryDto` | Résumé pour une culture |
-| GET   | `/api/stats/regions` | `year`, `cultureId` | `FeatureCollection` | Stats régionales en GeoJSON |
-| POST  | `/api/auth/login` | JSON `{ email, password }` | `{ token }` | Connexion utilisateur |
-| POST  | `/api/auth/register` | JSON `{ email, password, firstName?, lastName? }` | `{ id, email }` | Création d'utilisateur |
-| POST  | `/api/import` | Form-data `file` | `{ message }` | Importer des données Excel |
+| GET   | `/api/v1/regions` | - | `RegionDto[]` | Liste des régions |
+| GET   | `/api/v1/cultures` | - | `CultureDto[]` | Liste des cultures |
+| GET   | `/api/v1/cultures/years` | - | `number[]` | Années disponibles |
+| GET   | `/api/v1/stats` | `year?`, `regionId?`, `cultureId?`, `granularity?`, `page?`, `limit?` | `{ total, page, limit, data: AgriculturalStatDto[] }` | Stats filtrées |
+| GET   | `/api/v1/stats/regions/cultures/:cultureId/years/:year` | `cultureId` (ID), `year` | `AgriculturalStatDto[]` | Stats par région |
+| GET   | `/api/v1/stats/cultures/:cultureId/summary` | `cultureId` (path), `year?` (query) | `CultureSummaryDto` | Résumé pour une culture |
+| GET   | `/api/v1/stats/regions` | `year`, `cultureId` | `FeatureCollection` | Stats régionales en GeoJSON |
+| POST  | `/api/v1/auth/login` | JSON `{ email, password }` | `{ token }` | Connexion utilisateur |
+| POST  | `/api/v1/auth/register` | JSON `{ email, password, firstName?, lastName? }` | `{ id, email }` | Création d'utilisateur |
+| POST  | `/api/v1/import` | Form-data `file` | `{ message }` | Importer des données Excel |
 
 ---
 
 ## 🔐 Authentification
 
-Toutes les routes (sauf `/api/auth` et `/api-docs`) nécessitent un token JWT.
+Toutes les routes (sauf `/api/v1/auth` et `/api-docs`) nécessitent un token JWT.
 
 ### Obtenir un token
 
 ```
-POST /api/auth/login
+POST /api/v1/auth/login
 { "email": "user@example.com", "password": "votre_mot_de_passe" }
 ```
 

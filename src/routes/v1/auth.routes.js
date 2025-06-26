@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const authController = require('../controllers/auth.controller');
-const appsController = require('../controllers/apps.controller');
-const adminOnly = require('../middlewares/role-admin-only');
-const universalAuth = require('../middlewares/auth-universal.middleware');
+const authController = require('../../controllers/auth.controller');
+const appsController = require('../../controllers/apps.controller');
+const adminOnly = require('../../middlewares/role-admin-only');
+const universalAuth = require('../../middlewares/auth-universal.middleware');
 
 router.post('/login', authController.login);
 router.post('/register', authController.register);
