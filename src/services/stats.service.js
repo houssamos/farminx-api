@@ -1,7 +1,7 @@
 const statsRepository = require("../repositories/stats.repository");
 const {
   statEntityToModel,
-  productSummaryEntityToModel,
+  cultureSummaryEntityToModel,
 } = require("../mapping/stat.mapping");
 
 exports.getFilteredStats = async (filters) => {
@@ -14,13 +14,13 @@ exports.getFilteredStats = async (filters) => {
   };
 };
 
-exports.getStatsByRegion = async (productId, year) => {
-    const entities = await statsRepository.findStatsByRegion(productId, year);
+exports.getStatsByRegion = async (cultureId, year) => {
+    const entities = await statsRepository.findStatsByRegion(cultureId, year);
     return entities.map(statEntityToModel);
 };
 
-exports.getProductSummary = async (productId, year) => {
-    const entity = await statsRepository.getSummaryByProduct(productId, year);
-    return productSummaryEntityToModel(entity);
+exports.getCultureSummary = async (cultureId, year) => {
+    const entity = await statsRepository.getSummaryByCulture(cultureId, year);
+    return cultureSummaryEntityToModel(entity);
 };
   

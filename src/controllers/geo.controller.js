@@ -1,9 +1,9 @@
 const geoService = require('../services/geo.service');
 
 exports.getRegionStatsGeoJSON = async (req, res) => {
-  const { year, productId } = req.query;
+  const { year, cultureId } = req.query;
   try {
-    const geojson = await geoService.buildRegionStatsGeoJSON({ year: parseInt(year), productId: productId });
+    const geojson = await geoService.buildRegionStatsGeoJSON({ year: parseInt(year), cultureId: cultureId });
     res.setHeader('Content-Type', 'application/geo+json');
     res.status(200).json(geojson);
   } catch (err) {

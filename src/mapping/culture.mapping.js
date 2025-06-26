@@ -1,6 +1,5 @@
 const Culture = require('../models/culture.model');
 const CultureDto = require('../dtos/culture.dto');
-const ProductEntity = require('../entities/product.entity');
 
 function entityToModel(entity) {
   if (!entity) return null;

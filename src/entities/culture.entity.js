@@ -1,4 +1,4 @@
-class ProductEntity {
+class CultureEntity {
   constructor({ id, name, category, unit, code }) {
     this.id = id;
     this.name = name;
@@ -7,4 +7,4 @@ class ProductEntity {
     this.code = code;
   }
 }
-module.exports = ProductEntity;
+module.exports = CultureEntity;

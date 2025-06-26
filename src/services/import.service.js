@@ -1,6 +1,6 @@
 const Excel = require('exceljs');
 const regionRepo = require("../repositories/regions.repository");
-const productRepo = require("../repositories/products.repository");
+const cultureRepo = require("../repositories/products.repository");
 const statsRepo = require("../repositories/stats.repository");
 
 exports.importFromExcelBuffer = async (buffer) => {
@@ -47,7 +47,7 @@ exports.importFromExcelBuffer = async (buffer) => {
     const regionName = regionParts[1].trim();
 
     const region = await regionRepo.upsertRegionByName(regionName, regionCode);
-    const product = await productRepo.upsertProduct({ name: productName, category: "COP", unit: "quintal", code: productCode });
+    const culture = await cultureRepo.upsertCulture({ name: productName, category: "COP", unit: "quintal", code: productCode });
 
     for (const year of years) { // years detected from header row
       const surface = parseValue(row.getCell(headers[`SURF_${year}`]));
@@ -57,7 +57,7 @@ exports.importFromExcelBuffer = async (buffer) => {
       if (surface || rendement || production) {
         await statsRepo.upsertStat({
           regionId: region.id,
-          productId: product.id,
+          cultureId: culture.id,
           year,
           surface,
           rendement,

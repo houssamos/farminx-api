@@ -1,8 +1,8 @@
 const geoRepository = require('../repositories/geo.repository');
 const path = require('path');
 
-exports.buildRegionStatsGeoJSON = async ({ year, productId }) => {
-  const stats = await geoRepository.getStatsByRegion({ year, productId });
+exports.buildRegionStatsGeoJSON = async ({ year, cultureId }) => {
+  const stats = await geoRepository.getStatsByRegion({ year, cultureId });
 
   const features = await Promise.all(
     stats.map(async (stat) => {
