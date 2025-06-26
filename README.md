@@ -50,7 +50,8 @@ npm start
 ## 🔍 Documentation Swagger
 Accessible ici :
 ```
-http://localhost:3000/api-docs
+http://localhost:3000/api-docs/v1
+http://localhost:3000/api-docs/v2
 ```
 
 ---
@@ -96,7 +97,7 @@ package.json       # Scripts, dépendances
 
 ## 🔐 Authentification
 
-Toutes les routes (sauf `/api/v1/auth` et `/api-docs`) nécessitent un token JWT.
+Toutes les routes (sauf `/api/v1/auth`, `/api-docs/v1` et `/api-docs/v2`) nécessitent un token JWT.
 
 ### Obtenir un token
 
