@@ -84,10 +84,10 @@ package.json       # Scripts, dépendances
 | GET   | `/api/regions` | - | `RegionDto[]` | Liste des régions |
 | GET   | `/api/cultures` | - | `CultureDto[]` | Liste des cultures |
 | GET   | `/api/cultures/years` | - | `number[]` | Années disponibles |
-| GET   | `/api/stats` | `year?`, `regionId?`, `productId?`, `granularity?`, `page?`, `limit?` | `{ total, page, limit, data: AgriculturalStatDto[] }` | Stats filtrées |
-| GET   | `/api/stats/regions/cultures/:culture/years/:year` | `culture` (ID), `year` | `AgriculturalStatDto[]` | Stats par région |
-| GET   | `/api/stats/products/:id/summary` | `id` (path), `year?` (query) | `ProductSummaryDto` | Résumé pour un produit |
-| GET   | `/api/stats/regions` | `year`, `productId` | `FeatureCollection` | Stats régionales en GeoJSON |
+| GET   | `/api/stats` | `year?`, `regionId?`, `cultureId?`, `granularity?`, `page?`, `limit?` | `{ total, page, limit, data: AgriculturalStatDto[] }` | Stats filtrées |
+| GET   | `/api/stats/regions/cultures/:cultureId/years/:year` | `cultureId` (ID), `year` | `AgriculturalStatDto[]` | Stats par région |
+| GET   | `/api/stats/cultures/:id/summary` | `id` (path), `year?` (query) | `CultureSummaryDto` | Résumé pour une culture |
+| GET   | `/api/stats/regions` | `year`, `cultureId` | `FeatureCollection` | Stats régionales en GeoJSON |
 | POST  | `/api/auth/login` | JSON `{ email, password }` | `{ token }` | Connexion utilisateur |
 | POST  | `/api/auth/register` | JSON `{ email, password, firstName?, lastName? }` | `{ id, email }` | Création d'utilisateur |
 | POST  | `/api/import` | Form-data `file` | `{ message }` | Importer des données Excel |

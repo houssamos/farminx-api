@@ -1,11 +1,11 @@
 const Stat = require('../models/stat.model');
-const ProductSummary = require('../models/product-summary.model');
+const CultureSummary = require('../models/culture-summary.model');
 const Region = require('../models/region.model');
 const Culture = require('../models/culture.model');
 const StatDto = require('../dtos/stat.dto');
-const ProductSummaryDto = require('../dtos/product-summary.dto');
+const CultureSummaryDto = require('../dtos/culture-summary.dto');
 const StatEntity = require('../entities/stat.entity');
-const ProductSummaryEntity = require('../entities/product-summary.entity');
+const CultureSummaryEntity = require('../entities/culture-summary.entity');
 const { modelToDto: regionModelToDto } = require('./region.mapping');
 const { modelToDto: cultureModelToDto } = require('./culture.mapping');
 
@@ -29,10 +29,10 @@ function statEntityToModel(entity) {
   });
 }
 
-function productSummaryEntityToModel(entity) {
+function cultureSummaryEntityToModel(entity) {
   if (!entity) return null;
-  return new ProductSummary({
-    productId: entity.productId,
+  return new CultureSummary({
+    cultureId: entity.cultureId,
     name: entity.name,
     totalSurface: entity.totalSurface,
     avgYield: entity.avgYield,
@@ -56,10 +56,10 @@ function statModelToDto(model) {
   });
 }
 
-function productSummaryModelToDto(model) {
+function cultureSummaryModelToDto(model) {
   if (!model) return null;
-  return new ProductSummaryDto({
-    productId: model.productId,
+  return new CultureSummaryDto({
+    cultureId: model.cultureId,
     name: model.name,
     totalSurface: model.totalSurface,
     avgYield: model.avgYield,
@@ -71,8 +71,8 @@ function productSummaryModelToDto(model) {
 
 module.exports = {
   statEntityToModel,
-  productSummaryEntityToModel,
+  cultureSummaryEntityToModel,
   statModelToDto,
-  productSummaryModelToDto,
+  cultureSummaryModelToDto,
 };
 

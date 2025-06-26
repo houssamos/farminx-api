@@ -1,6 +1,6 @@
-class ProductSummaryEntity {
-  constructor({ productId, name, totalSurface, avgYield, totalProduction, minYear, maxYear }) {
-    this.productId = productId;
+class CultureSummaryEntity {
+  constructor({ cultureId, name, totalSurface, avgYield, totalProduction, minYear, maxYear }) {
+    this.cultureId = cultureId;
     this.name = name;
     this.totalSurface = totalSurface;
     this.avgYield = avgYield;
@@ -9,4 +9,4 @@ class ProductSummaryEntity {
     this.maxYear = maxYear;
   }
 }
-module.exports = ProductSummaryEntity;
+module.exports = CultureSummaryEntity;

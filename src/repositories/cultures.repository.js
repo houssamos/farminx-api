@@ -1,9 +1,9 @@
 const prisma = require('../config/prisma');
-const ProductEntity = require('../entities/product.entity');
+const CultureEntity = require('../entities/culture.entity');
 
 exports.findAll = async () => {
   const rows = await prisma.products.findMany();
-  return rows.map((row) => new ProductEntity(row));
+  return rows.map((row) => new CultureEntity(row));
 };
 
 exports.findYears = async () => {

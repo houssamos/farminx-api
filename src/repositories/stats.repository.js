@@ -1,14 +1,14 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const StatEntity = require('../entities/stat.entity');
-const ProductSummaryEntity = require('../entities/product-summary.entity');
+const CultureSummaryEntity = require('../entities/culture-summary.entity');
 const logger = require('../utils/logger');
 
-exports.getFilteredStats = async ({ year, regionId, productId, granularity, page = 1, limit = 50 }) => {
+exports.getFilteredStats = async ({ year, regionId, cultureId, granularity, page = 1, limit = 50 }) => {
   const where = {
     ...(year ? { year } : {}),
     ...(regionId ? { region_id: regionId } : {}),
-    ...(productId ? { product_id: productId } : {}),
+    ...(cultureId ? { product_id: cultureId } : {}),
     ...(granularity ? { granularity } : {})
   };
 
@@ -33,9 +33,9 @@ exports.getFilteredStats = async ({ year, regionId, productId, granularity, page
   };
 };
 
-exports.findStatsByRegion = async (productId, year) => {
+exports.findStatsByRegion = async (cultureId, year) => {
   const query = {
-    product_id: productId,
+    product_id: cultureId,
     year: parseInt(year),
     granularity: 'region'
   };
@@ -44,7 +44,7 @@ exports.findStatsByRegion = async (productId, year) => {
   
   const results = await prisma.agricultural_stats.findMany({
     where: {
-      product_id: productId,
+      product_id: cultureId,
       year: year,
       granularity: 'region'
     },
@@ -57,11 +57,11 @@ exports.findStatsByRegion = async (productId, year) => {
   return results.map((row) => new StatEntity(row));
 };
 
-  exports.upsertStat = async ({ regionId, productId, year, surface, rendement, production }) => {
+exports.upsertStat = async ({ regionId, cultureId, year, surface, rendement, production }) => {
     const existing = await prisma.agricultural_stats.findFirst({
       where: {
         region_id: regionId,
-        product_id: productId,
+        product_id: cultureId,
         year: year,
         granularity: 'region'
       }
@@ -69,7 +69,7 @@ exports.findStatsByRegion = async (productId, year) => {
   
     const data = {
       region_id: regionId,
-      product_id: productId,
+      product_id: cultureId,
       year,
       granularity: 'region'
     };
@@ -94,15 +94,15 @@ exports.findStatsByRegion = async (productId, year) => {
     }
   };
 
-  exports.getSummaryByProduct = async (productId, year) => {
+  exports.getSummaryByCulture = async (cultureId, year) => {
     const where = {
-      product_id: productId,
+      product_id: cultureId,
       granularity: 'region',
       ...(year ? { year } : {})
     };
-  
+
     const [product] = await prisma.products.findMany({
-      where: { id: productId },
+      where: { id: cultureId },
       take: 1
     });
   
@@ -123,8 +123,8 @@ exports.findStatsByRegion = async (productId, year) => {
       }
     });
   
-  return new ProductSummaryEntity({
-    productId,
+  return new CultureSummaryEntity({
+    cultureId,
     name: product?.name ?? null,
     totalSurface: result._sum.surface_ha ?? 0,
     totalProduction: result._sum.production_t ?? 0,

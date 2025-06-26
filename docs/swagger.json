@@ -103,7 +103,7 @@
         "tags": ["Statistiques"],
         "parameters": [
           { "name": "year", "in": "query", "schema": { "type": "integer" } },
-          { "name": "productId", "in": "query", "schema": { "type": "string", "format":"uuid" } },
+          { "name": "cultureId", "in": "query", "schema": { "type": "string", "format":"uuid" } },
           { "name": "regionId", "in": "query", "schema": { "type": "integer", "format":"uuid" } },
           { "name": "granularity", "in": "query", "schema": { "type": "string", "enum": ["region", "departement"] } },
           { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } },
@@ -133,7 +133,7 @@
         }
       }
     },
-    "/stats/regions/products/{productId}/years/{year}": {
+    "/stats/regions/cultures/{cultureId}/years/{year}": {
       "get": {
         "summary": "Statistiques par r\u00e9gion",
         "tags": [
@@ -141,13 +141,13 @@
         ],
         "parameters": [
           {
-            "name": "productId",
+            "name": "cultureId",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string",
               "format": "uuid",
-              "description": "ID du produit pour lequel obtenir les statistiques"
+              "description": "ID de la culture pour laquelle obtenir les statistiques"
             }
           },
           {
@@ -176,13 +176,13 @@
         }
       }
     },
-    "/stats/products/{productId}/summary": {
+    "/stats/cultures/{cultureId}/summary": {
       "get": {
-        "summary": "Résumé statistique pour un produit",
+        "summary": "Résumé statistique pour une culture",
         "tags": ["Statistiques"],
         "parameters": [
           {
-            "name": "productId",
+            "name": "cultureId",
             "in": "path",
             "required": true,
             "schema": { "type": "string", "format": "uuid" }
@@ -197,13 +197,13 @@
         ],
         "responses": {
           "200": {
-            "description": "Résumé global ou par année du produit",
+            "description": "Résumé global ou par année de la culture",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "productId": { "type": "string", "format": "uuid" },
+                    "cultureId": { "type": "string", "format": "uuid" },
                     "name": { "type": "string" },
                     "totalSurface": { "type": "number" },
                     "avgYield": { "type": "number" },
@@ -279,7 +279,7 @@
         "tags": ["Statistiques"],
         "parameters": [
           { "name": "year", "in": "query", "required": true, "schema": { "type": "integer" } },
-          { "name": "productId", "in": "query", "required": true, "schema": { "type": "string", "format":"uuid" } }
+          { "name": "cultureId", "in": "query", "required": true, "schema": { "type": "string", "format":"uuid" } }
         ],
         "responses": {
           "200": {
@@ -643,10 +643,10 @@
           "code": { "type": "string" }
         }
       },
-      "ProductSummary": {
+      "CultureSummary": {
         "type": "object",
         "properties": {
-          "productId": { "type": "string", "format": "uuid" },
+          "cultureId": { "type": "string", "format": "uuid" },
           "name": { "type": "string" },
           "totalSurface": { "type": "number" },
           "avgYield": { "type": "number" },
@@ -704,10 +704,10 @@
         }
       },
 
-      "ProductSummary": {
+      "CultureSummary": {
         "type": "object",
         "properties": {
-          "productId": { "type": "string", "format": "uuid" },
+          "cultureId": { "type": "string", "format": "uuid" },
           "name": { "type": "string" },
           "totalSurface": { "type": "number" },
           "avgYield": { "type": "number" },
