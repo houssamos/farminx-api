@@ -86,7 +86,7 @@ package.json       # Scripts, dépendances
 | GET   | `/api/cultures/years` | - | `number[]` | Années disponibles |
 | GET   | `/api/stats` | `year?`, `regionId?`, `cultureId?`, `granularity?`, `page?`, `limit?` | `{ total, page, limit, data: AgriculturalStatDto[] }` | Stats filtrées |
 | GET   | `/api/stats/regions/cultures/:cultureId/years/:year` | `cultureId` (ID), `year` | `AgriculturalStatDto[]` | Stats par région |
-| GET   | `/api/stats/cultures/:id/summary` | `id` (path), `year?` (query) | `CultureSummaryDto` | Résumé pour une culture |
+| GET   | `/api/stats/cultures/:cultureId/summary` | `cultureId` (path), `year?` (query) | `CultureSummaryDto` | Résumé pour une culture |
 | GET   | `/api/stats/regions` | `year`, `cultureId` | `FeatureCollection` | Stats régionales en GeoJSON |
 | POST  | `/api/auth/login` | JSON `{ email, password }` | `{ token }` | Connexion utilisateur |
 | POST  | `/api/auth/register` | JSON `{ email, password, firstName?, lastName? }` | `{ id, email }` | Création d'utilisateur |

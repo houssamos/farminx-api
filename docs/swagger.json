@@ -220,9 +220,9 @@
         }
       }
     },
-    "/stats/regions/{regionId}/products": {
+    "/stats/regions/{regionId}/cultures": {
       "get": {
-        "summary": "Statistiques par produit pour une région",
+        "summary": "Statistiques par culture pour une région",
         "tags": ["Statistiques"],
         "parameters": [
           {
@@ -235,7 +235,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Liste des produits avec stats par année pour une région",
+            "description": "Liste des cultures avec stats par année pour une région",
             "content": {
               "application/json": {
                 "schema": {
@@ -243,7 +243,7 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "product": {
+                      "culture": {
                         "type": "object",
                         "properties": {
                           "id": { "type": "string", "format": "uuid" },
@@ -596,7 +596,7 @@
           "region": {
             "$ref": "#/components/schemas/Region"
           },
-          "product": {
+          "culture": {
             "type": "object",
             "properties": {
               "id": {
@@ -658,7 +658,7 @@
       "RegionProductStat": {
         "type": "object",
         "properties": {
-          "product": { "$ref": "#/components/schemas/Culture" },
+          "culture": { "$ref": "#/components/schemas/Culture" },
           "stats": {
             "type": "array",
             "items": {
