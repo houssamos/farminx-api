@@ -2,6 +2,8 @@ const express = require("express");
 const helmet = require("helmet");
 const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
+const swaggerDocV1 = require("../docs/v1/swagger.json");
+const swaggerDocV2 = require("../docs/v2/swagger.json");
 
 const v1RegionsRoutes = require("./routes/v1/regions.routes");
 const v1CulturesRoutes = require("./routes/v1/cultures.routes");
@@ -19,7 +21,21 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/v1/auth", v1AuthRoutes);
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(require("../docs/swagger.json")));
+app.use(
+  "/api-docs/v1",
+  swaggerUi.serveFiles(swaggerDocV1),
+  swaggerUi.setup(swaggerDocV1)
+);
+app.use(
+  "/api-docs/v2",
+  swaggerUi.serveFiles(swaggerDocV2),
+  swaggerUi.setup(swaggerDocV2)
+);
+app.use(
+  "/api-docs",
+  swaggerUi.serveFiles(swaggerDocV1),
+  swaggerUi.setup(swaggerDocV1)
+);
 
 //app.use(userAuthMiddleware); // Middleware d'authentification pour les routes suivantes
 app.use(universalAuth); 
