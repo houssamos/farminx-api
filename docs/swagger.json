@@ -53,19 +53,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string",
-                        "format": "uuid"
-                      },
-                      "name": {
-                        "type": "string"
-                      },
-                      "code": {
-                        "type": "string"
-                      }
-                    }
+                    "$ref": "#/components/schemas/Culture"
                   }
                 }
               }
@@ -655,7 +643,7 @@
           "maxYear": { "type": "integer" }
         }
       },
-      "RegionProductStat": {
+      "RegionCultureStat": {
         "type": "object",
         "properties": {
           "culture": { "$ref": "#/components/schemas/Culture" },
@@ -703,20 +691,6 @@
           "token": { "type": "string" }
         }
       },
-
-      "CultureSummary": {
-        "type": "object",
-        "properties": {
-          "cultureId": { "type": "string", "format": "uuid" },
-          "name": { "type": "string" },
-          "totalSurface": { "type": "number" },
-          "avgYield": { "type": "number" },
-          "totalProduction": { "type": "number" },
-          "minYear": { "type": "integer" },
-          "maxYear": { "type": "integer" }
-        }
-      },
-
       "RegisterResponse": {
         "type": "object",
         "properties": {
