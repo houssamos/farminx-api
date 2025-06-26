@@ -80,19 +80,19 @@ exports.findStatsByRegion = async (productId, year) => {
       ...(production !== undefined ? { production_t: production } : {})
     };
   
-  if (existing) {
-    const row = await prisma.agricultural_stats.update({
-      where: { id: existing.id },
-      data: updates
-    });
-    return new StatEntity(row);
-  } else {
-    const row = await prisma.agricultural_stats.create({
-      data: { ...data, ...updates }
-    });
-    return new StatEntity(row);
-  }
-};
+    if (existing) {
+      const row = await prisma.agricultural_stats.update({
+        where: { id: existing.id },
+        data: updates
+      });
+      return new StatEntity(row);
+    } else {
+      const row = await prisma.agricultural_stats.create({
+        data: { ...data, ...updates }
+      });
+      return new StatEntity(row);
+    }
+  };
 
   exports.getSummaryByProduct = async (productId, year) => {
     const where = {

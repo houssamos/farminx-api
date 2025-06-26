@@ -56,7 +56,8 @@
                     "type": "object",
                     "properties": {
                       "id": {
-                        "type": "integer"
+                        "type": "string",
+                        "format": "uuid"
                       },
                       "name": {
                         "type": "string"
@@ -102,8 +103,8 @@
         "tags": ["Statistiques"],
         "parameters": [
           { "name": "year", "in": "query", "schema": { "type": "integer" } },
-          { "name": "productId", "in": "query", "schema": { "type": "integer" } },
-          { "name": "regionId", "in": "query", "schema": { "type": "integer" } },
+          { "name": "productId", "in": "query", "schema": { "type": "string", "format":"uuid" } },
+          { "name": "regionId", "in": "query", "schema": { "type": "integer", "format":"uuid" } },
           { "name": "granularity", "in": "query", "schema": { "type": "string", "enum": ["region", "departement"] } },
           { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } },
           { "name": "limit", "in": "query", "schema": { "type": "integer", "default": 50 } }
@@ -132,7 +133,7 @@
         }
       }
     },
-    "/stats/regions/cultures/{culture}/years/{year}": {
+    "/stats/regions/products/{productId}/years/{year}": {
       "get": {
         "summary": "Statistiques par r\u00e9gion",
         "tags": [
@@ -140,11 +141,13 @@
         ],
         "parameters": [
           {
-            "name": "culture",
+            "name": "productId",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string",
+              "format": "uuid",
+              "description": "ID du produit pour lequel obtenir les statistiques"
             }
           },
           {
@@ -173,16 +176,16 @@
         }
       }
     },
-    "/stats/products/{id}/summary": {
+    "/stats/products/{productId}/summary": {
       "get": {
         "summary": "Résumé statistique pour un produit",
         "tags": ["Statistiques"],
         "parameters": [
           {
-            "name": "id",
+            "name": "productId",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer" }
+            "schema": { "type": "string", "format": "uuid" }
           },
           {
             "name": "year",
@@ -200,7 +203,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "productId": { "type": "integer" },
+                    "productId": { "type": "string", "format": "uuid" },
                     "name": { "type": "string" },
                     "totalSurface": { "type": "number" },
                     "avgYield": { "type": "number" },
@@ -217,7 +220,7 @@
         }
       }
     },
-    "/stats/regions/{id}/products": {
+    "/stats/regions/{regionId}/products": {
       "get": {
         "summary": "Statistiques par produit pour une région",
         "tags": ["Statistiques"],
@@ -226,7 +229,8 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "integer" }
+            "schema": { "type": "string", "format": "uuid" },
+            "description": "ID de la région"
           }
         ],
         "responses": {
@@ -242,7 +246,7 @@
                       "product": {
                         "type": "object",
                         "properties": {
-                          "id": { "type": "integer" },
+                          "id": { "type": "string", "format": "uuid" },
                           "name": { "type": "string" },
                           "code": { "type": "string" }
                         }
@@ -275,7 +279,7 @@
         "tags": ["Statistiques"],
         "parameters": [
           { "name": "year", "in": "query", "required": true, "schema": { "type": "integer" } },
-          { "name": "productId", "in": "query", "required": true, "schema": { "type": "string" } }
+          { "name": "productId", "in": "query", "required": true, "schema": { "type": "string", "format":"uuid" } }
         ],
         "responses": {
           "200": {
@@ -296,7 +300,7 @@
                           "properties": {
                             "type": "object",
                             "properties": {
-                              "regionId": { "type": "string" },
+                              "regionId": { "type": "string", "format": "uuid" },
                               "regionName": { "type": "string" },
                               "surfaceHa": { "type": "number" },
                               "yieldQxHa": { "type": "number" },
@@ -379,7 +383,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "id": { "type": "integer" },
+                    "id": { "type": "string", "format": "uuid" },
                     "email": { "type": "string", "format": "email" }
                   }
                 }
@@ -459,7 +463,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "id": { "type": "integer" },
+                    "id": { "type": "string", "format": "uuid" },
                     "name": { "type": "string" }
                   }
                 }
@@ -497,7 +501,7 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "id": { "type": "string" },
+                    "id": { "type": "string", "format": "uuid" },
                     "name": { "type": "string" },
                     "apiKey": { "type": "string" }
                   }
@@ -556,7 +560,8 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer"
+            "type": "string",
+            "format": "uuid"
           },
           "code": {
             "type": "string"
@@ -570,7 +575,8 @@
         "type": "object",
         "properties": {
           "id": {
-            "type": "integer"
+            "type": "string",
+            "format": "uuid"
           },
           "year": {
             "type": "integer"
@@ -594,7 +600,8 @@
             "type": "object",
             "properties": {
               "id": {
-                "type": "integer"
+                "type": "string",
+                "format": "uuid"
               },
               "name": {
                 "type": "string"
@@ -664,6 +671,57 @@
               }
             }
           }
+        }
+      },
+      "AppRegisterKeyResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "name": { "type": "string" },
+          "apiKey": { "type": "string" }
+        }
+      },
+
+      "AppRegisterResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "name": { "type": "string" }
+        }
+      },
+
+      "ImportResult": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string" }
+        }
+      },
+
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": { "type": "string" }
+        }
+      },
+
+      "ProductSummary": {
+        "type": "object",
+        "properties": {
+          "productId": { "type": "string", "format": "uuid" },
+          "name": { "type": "string" },
+          "totalSurface": { "type": "number" },
+          "avgYield": { "type": "number" },
+          "totalProduction": { "type": "number" },
+          "minYear": { "type": "integer" },
+          "maxYear": { "type": "integer" }
+        }
+      },
+
+      "RegisterResponse": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "format": "uuid" },
+          "email": { "type": "string", "format": "email" }
         }
       }
     }

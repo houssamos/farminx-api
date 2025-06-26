@@ -1,6 +1,7 @@
 const statsService = require("../services/stats.service");
-const { statModelToDto } = require("../mapping/stat.mapping");
+const { statModelToDto, productSummaryModelToDto } = require("../mapping/stat.mapping");
 const ProductSummaryDto = require("../dtos/product-summary.dto");
+const logger = require("../utils/logger");
 
 exports.getAgriculturalStats = async (req, res) => {
   try {
@@ -27,7 +28,7 @@ exports.getAgriculturalStats = async (req, res) => {
 };
 
 exports.getStatsByRegion = async (req, res) => {
-    const productId = parseInt(req.params.culture);
+    const productId = req.params.culture;
     const year = parseInt(req.params.year);
     try {
         const stats = await statsService.getStatsByRegion(parseInt(productId), parseInt(year));
@@ -39,12 +40,12 @@ exports.getStatsByRegion = async (req, res) => {
 
 exports.getProductSummary = async (req, res) => {
     try {
-      const productId = parseInt(req.params.id);
+      const productId = req.params.id;
       const year = req.query.year ? parseInt(req.query.year) : null;
-      if (isNaN(productId)) return res.status(400).json({ error: "ID produit invalide" });
+      if (!productId || productId == null) return res.status(400).json({ error: "ID produit invalide" });
   
       const summary = await statsService.getProductSummary(productId, year);
-      res.json(new ProductSummaryDto(summary));
+      res.json(productSummaryModelToDto(summary));
     } catch (err) {
       console.error("Erreur getProductSummary:", err);
       res.status(500).json({ error: "Erreur lors du calcul du résumé produit" });
