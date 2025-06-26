@@ -3,11 +3,11 @@ const helmet = require("helmet");
 const cors = require("cors");
 const swaggerUi = require("swagger-ui-express");
 
-const regionsRoutes = require("./routes/regions.routes");
-const culturesRoutes = require("./routes/cultures.routes");
-const statsRoutes = require("./routes/stats.routes");
-const importRoutes = require("./routes/import.routes");
-const authRoutes = require("./routes/auth.routes");
+const v1RegionsRoutes = require("./routes/v1/regions.routes");
+const v1CulturesRoutes = require("./routes/v1/cultures.routes");
+const v1StatsRoutes = require("./routes/v1/stats.routes");
+const v1ImportRoutes = require("./routes/v1/import.routes");
+const v1AuthRoutes = require("./routes/v1/auth.routes");
 const userAuthMiddleware = require("./middlewares/user-auth.middleware");
 const appAuthMiddleware = require("./middlewares/app-auth.middleware");
 const universalAuth = require('./middlewares/auth-universal.middleware');
@@ -18,17 +18,17 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/auth", authRoutes);
+app.use("/api/v1/auth", v1AuthRoutes);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(require("../docs/swagger.json")));
 
 //app.use(userAuthMiddleware); // Middleware d'authentification pour les routes suivantes
 app.use(universalAuth); 
 
 
-app.use("/api/regions", regionsRoutes);
-app.use("/api/cultures", culturesRoutes);
-app.use("/api/stats", statsRoutes);
-app.use("/api/import", adminOnly({ verifyInDb: true }), importRoutes);
+app.use("/api/v1/regions", v1RegionsRoutes);
+app.use("/api/v1/cultures", v1CulturesRoutes);
+app.use("/api/v1/stats", v1StatsRoutes);
+app.use("/api/v1/import", adminOnly({ verifyInDb: true }), v1ImportRoutes);
 
 app.get("/", (req, res) => res.send("Bienvenue sur l'API Farminx Stats"));
 
