@@ -10,8 +10,7 @@ const v1CulturesRoutes = require("./routes/v1/cultures.routes");
 const v1StatsRoutes = require("./routes/v1/stats.routes");
 const v1ImportRoutes = require("./routes/v1/import.routes");
 const v1AuthRoutes = require("./routes/v1/auth.routes");
-const userAuthMiddleware = require("./middlewares/user-auth.middleware");
-const appAuthMiddleware = require("./middlewares/app-auth.middleware");
+const recaptchaRoutes = require("./routes/recaptcha.routes");
 const universalAuth = require('./middlewares/auth-universal.middleware');
 const adminOnly = require('./middlewares/role-admin-only');
 
@@ -37,8 +36,10 @@ app.use(
   swaggerUi.setup(swaggerDocV1)
 );
 
-//app.use(userAuthMiddleware); // Middleware d'authentification pour les routes suivantes
-app.use(universalAuth); 
+app.use('/api', recaptchaRoutes);
+
+// Middleware d'authentification pour les routes suivantes
+app.use(universalAuth);
 
 
 app.use("/v1/regions", v1RegionsRoutes);
