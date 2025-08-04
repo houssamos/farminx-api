@@ -3,7 +3,7 @@ const CultureDto = require('../dtos/culture.dto');
 
 function entityToModel(entity) {
   if (!entity) return null;
-  return new Culture({ id: entity.id, name: entity.name, code: entity.code });
+  return new Culture({ id: entity.id, name: entity.name.replace(/\([^()]*\d+[^()]*\)/g, '').trim(), code: entity.code });
 }
 
 function modelToDto(model) {

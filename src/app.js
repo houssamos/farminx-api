@@ -20,7 +20,7 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
-app.use("/api/v1/auth", v1AuthRoutes);
+app.use("/v1/auth", v1AuthRoutes);
 app.use(
   "/api-docs/v1",
   swaggerUi.serveFiles(swaggerDocV1),
@@ -41,10 +41,10 @@ app.use(
 app.use(universalAuth); 
 
 
-app.use("/api/v1/regions", v1RegionsRoutes);
-app.use("/api/v1/cultures", v1CulturesRoutes);
-app.use("/api/v1/stats", v1StatsRoutes);
-app.use("/api/v1/import", adminOnly({ verifyInDb: true }), v1ImportRoutes);
+app.use("/v1/regions", v1RegionsRoutes);
+app.use("/v1/cultures", v1CulturesRoutes);
+app.use("/v1/stats", v1StatsRoutes);
+app.use("/v1/import", adminOnly({ verifyInDb: true }), v1ImportRoutes);
 
 app.get("/", (req, res) => res.send("Bienvenue sur l'API Farminx Stats"));
 

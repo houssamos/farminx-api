@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000/api/v1",
+      "url": "http://localhost:3001/v1",
       "description": "Serveur local"
     }
   ],
@@ -115,7 +115,7 @@
             "name": "regionId",
             "in": "query",
             "schema": {
-              "type": "integer",
+              "type": "string",
               "format": "uuid"
             }
           },
@@ -398,7 +398,7 @@
           "200": {
             "description": "GeoJSON des régions avec statistiques",
             "content": {
-              "application/geo+json": {
+              "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {

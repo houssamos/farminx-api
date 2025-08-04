@@ -7,8 +7,8 @@ exports.getAgriculturalStats = async (req, res) => {
   try {
     const filters = {
       year: req.query.year ? parseInt(req.query.year) : undefined,
-      regionId: req.query.regionId ? parseInt(req.query.regionId) : undefined,
-      cultureId: req.query.cultureId ? parseInt(req.query.cultureId) : undefined,
+      regionId: req.query.regionId ? req.query.regionId : undefined,
+      cultureId: req.query.cultureId ? req.query.cultureId : undefined,
       granularity: req.query.granularity,
       page: parseInt(req.query.page) || 1,
       limit: parseInt(req.query.limit) || 50
