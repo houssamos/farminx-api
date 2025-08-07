@@ -25,3 +25,7 @@ exports.isAdmin = async (userId) => {
   const user = await usersRepository.findById(userId);
   return user?.role === 'admin';
 };
+
+exports.countUsers = async () => {
+  return usersRepository.countAll();
+};
