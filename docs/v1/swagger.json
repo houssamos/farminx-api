@@ -562,6 +562,35 @@
         }
       }
     },
+    "/auth/me": {
+      "get": {
+        "summary": "Profil de l'utilisateur authentifié",
+        "tags": [
+          "Authentification"
+        ],
+        "responses": {
+          "200": {
+            "description": "Informations de l'utilisateur connecté",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non autorisé"
+          },
+          "404": {
+            "description": "Utilisateur non trouvé"
+          },
+          "500": {
+            "description": "Erreur serveur"
+          }
+        }
+      }
+    },
     "/auth/login-app": {
       "post": {
         "summary": "Connexion d'une application enregistrée",
@@ -983,6 +1012,28 @@
           "email": {
             "type": "string",
             "format": "email"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
           }
         }
       }
