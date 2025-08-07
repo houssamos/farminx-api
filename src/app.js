@@ -10,6 +10,7 @@ const v1CulturesRoutes = require("./routes/v1/cultures.routes");
 const v1StatsRoutes = require("./routes/v1/stats.routes");
 const v1ImportRoutes = require("./routes/v1/import.routes");
 const v1AuthRoutes = require("./routes/v1/auth.routes");
+const v1UsersRoutes = require("./routes/v1/users.routes");
 const recaptchaRoutes = require("./routes/v1/recaptcha.routes");
 const universalAuth = require('./middlewares/auth-universal.middleware');
 const adminOnly = require('./middlewares/role-admin-only');
@@ -45,6 +46,7 @@ app.use(universalAuth);
 app.use("/v1/regions", v1RegionsRoutes);
 app.use("/v1/cultures", v1CulturesRoutes);
 app.use("/v1/stats", v1StatsRoutes);
+app.use("/v1/users", v1UsersRoutes);
 app.use("/v1/import", adminOnly({ verifyInDb: true }), v1ImportRoutes);
 
 app.get("/", (req, res) => res.send("Bienvenue sur l'API Farminx Stats"));
