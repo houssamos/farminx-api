@@ -4,9 +4,11 @@ const authController = require('../../controllers/auth.controller');
 const appsController = require('../../controllers/apps.controller');
 const adminOnly = require('../../middlewares/role-admin-only');
 const universalAuth = require('../../middlewares/auth-universal.middleware');
+const userAuth = require('../../middlewares/user-auth.middleware');
 
 router.post('/login', authController.login);
 router.post('/register', authController.register);
+router.get('/me', userAuth, authController.me);
 
 router.post('/login-app', appsController.loginApp);
 router.post('/register-app', universalAuth, adminOnly({ verifyInDb: true }), appsController.registerApp);
