@@ -10,7 +10,7 @@ exports.login = async (req, res) => {
     if (!user) return res.status(401).json({ error: 'Identifiants invalides' });
     const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
     res.json(tokenToLoginResponseDto(token));
-  } catch (err) {
+  } catch {
     res.status(500).json({ error: "Erreur lors de l'authentification" });
   }
 };
@@ -21,7 +21,17 @@ exports.register = async (req, res) => {
   try {
     const user = await usersService.createUser({ email, password, firstName, lastName });
     res.status(201).json(userModelToRegisterResponseDto(user));
-  } catch (err) {
+  } catch {
     res.status(500).json({ error: "Erreur lors de la création de l'utilisateur" });
+  }
+};
+
+exports.me = async (req, res) => {
+  try {
+    const user = await usersService.getById(req.user.id);
+    if (!user) return res.status(404).json({ error: 'Utilisateur non trouvé' });
+    res.json(user);
+  } catch {
+    res.status(500).json({ error: "Erreur lors de la récupération de l'utilisateur" });
   }
 };

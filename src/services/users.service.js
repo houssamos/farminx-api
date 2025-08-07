@@ -16,6 +16,11 @@ exports.createUser = async ({ email, password, firstName, lastName, role = 'user
   return entityToModel(entity);
 };
 
+exports.getById = async (id) => {
+  const user = await usersRepository.findById(id);
+  return entityToModel(user);
+};
+
 exports.isAdmin = async (userId) => {
   const user = await usersRepository.findById(userId);
   return user?.role === 'admin';
