@@ -36,7 +36,7 @@ router.post("/recaptcha", async (req, res) => {
       return res.status(400).json({ error: "Invalid recaptcha token" });
     }
 
-    if (typeof data.score === "number" && data.score < 0.5) {
+    if (typeof data.score === "number" && recaptcha.action === 'signup' && data.score < 0.5) {
       return res.status(403).json({ error: "Recaptcha score too low" });
     }
 
