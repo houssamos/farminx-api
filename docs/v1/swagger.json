@@ -788,6 +788,31 @@
           }
         }
       }
+    },
+    "/users/count": {
+      "get": {
+        "summary": "Nombre total d'utilisateurs",
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "Nombre total d'utilisateurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1012,28 +1037,6 @@
           "email": {
             "type": "string",
             "format": "email"
-          }
-        }
-      },
-      "User": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "firstName": {
-            "type": "string"
-          },
-          "lastName": {
-            "type": "string"
-          },
-          "role": {
-            "type": "string"
           }
         }
       }
