@@ -72,6 +72,7 @@ model users {
   created_at    DateTime @default(now())
   announcements announcements[]
   favorites     favorites[]
+  notifications notifications?
 }
 
 model announcements {
@@ -109,4 +110,13 @@ model api_app {
   secret    String?
   apiKey    String?   @unique
   createdAt DateTime @default(now())
+}
+
+model notifications {
+  id          String   @id @default(uuid()) @db.Uuid
+  user_id     String   @unique @db.Uuid
+  stats       Boolean  @default(false)
+  marketplace Boolean  @default(false)
+  created_at  DateTime @default(now())
+  users       users    @relation(fields: [user_id], references: [id])
 }

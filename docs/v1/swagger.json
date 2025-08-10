@@ -813,6 +813,64 @@
           }
         }
       }
+    },
+    "/notifications": {
+      "get": {
+        "summary": "Récupérer les préférences de notification",
+        "tags": [
+          "Notifications"
+        ],
+        "responses": {
+          "200": {
+            "description": "Préférences de notification",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Notification"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notifications/subscribe": {
+      "post": {
+        "summary": "Mettre à jour les préférences de notification",
+        "tags": [
+          "Notifications"
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "stats": {
+                    "type": "boolean"
+                  },
+                  "marketplace": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Préférences de notification",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Notification"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1037,6 +1095,29 @@
           "email": {
             "type": "string",
             "format": "email"
+          }
+        }
+      },
+      "Notification": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "stats": {
+            "type": "boolean"
+          },
+          "marketplace": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       }
