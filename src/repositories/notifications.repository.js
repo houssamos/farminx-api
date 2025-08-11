@@ -14,3 +14,16 @@ exports.findByUserId = async (userId) => {
   const row = await prisma.notifications.findUnique({ where: { user_id: userId } });
   return row ? new NotificationEntity(row) : null;
 };
+
+exports.findSubscribed = async ({ stats = false, marketplace = false }) => {
+  const or = [];
+  if (stats) or.push({ stats: true });
+  if (marketplace) or.push({ marketplace: true });
+  if (!or.length) return [];
+
+  const rows = await prisma.notifications.findMany({
+    where: { OR: or },
+    select: { user_id: true },
+  });
+  return rows.map((r) => r.user_id);
+};
