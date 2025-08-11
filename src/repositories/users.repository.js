@@ -21,3 +21,9 @@ exports.findById = async (id) => {
 exports.countAll = async () => {
   return prisma.users.count();
 };
+
+exports.listByIds = async (ids) => {
+  if (!ids.length) return [];
+  const rows = await prisma.users.findMany({ where: { id: { in: ids } } });
+  return rows.map((row) => new UserEntity(row));
+};
