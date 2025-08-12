@@ -26,6 +26,8 @@
                       "email": { "type": "string" },
                       "firstName": { "type": "string", "nullable": true },
                       "lastName": { "type": "string", "nullable": true },
+                      "statsSubscribed": { "type": "boolean" },
+                      "marketplaceSubscribed": { "type": "boolean" },
                       "subscribed": { "type": "boolean" },
                       "subscriptionDate": { "type": "string", "format": "date-time", "nullable": true }
                     }

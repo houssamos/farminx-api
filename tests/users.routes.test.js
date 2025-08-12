@@ -79,6 +79,8 @@ describe('GET /v1/users', () => {
         email: 'user2@test.com',
         firstName: 'Jane',
         lastName: 'Doe',
+        statsSubscribed: true,
+        marketplaceSubscribed: false,
         subscribed: true,
         subscriptionDate: '2024-06-01T00:00:00.000Z',
       },
