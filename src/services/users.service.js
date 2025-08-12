@@ -28,14 +28,21 @@ exports.isAdmin = async (userId) => {
 
 exports.listUsersWithNotifications = async () => {
   const rows = await usersRepository.listAllWithNotifications();
-  return rows.map(({ user, notification }) => ({
-    id: user.id,
-    email: user.email,
-    firstName: user.first_name,
-    lastName: user.last_name,
-    subscribed: Boolean(notification?.stats || notification?.marketplace),
-    subscriptionDate: notification?.created_at,
-  }));
+  return rows.map(({ user, notification }) => {
+    const statsSubscribed = Boolean(notification?.stats);
+    const marketplaceSubscribed = Boolean(notification?.marketplace);
+
+    return {
+      id: user.id,
+      email: user.email,
+      firstName: user.first_name,
+      lastName: user.last_name,
+      statsSubscribed,
+      marketplaceSubscribed,
+      subscribed: statsSubscribed || marketplaceSubscribed,
+      subscriptionDate: notification?.created_at,
+    };
+  });
 };
 
 exports.countUsers = async () => {
