@@ -12,24 +12,46 @@
         "tags": [
           "Users"
         ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": { "type": "integer", "default": 1 },
+            "description": "Numéro de page"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": { "type": "integer", "default": 50 },
+            "description": "Nombre d'éléments par page"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Liste des utilisateurs avec statut d'abonnement",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": { "type": "string" },
-                      "email": { "type": "string" },
-                      "firstName": { "type": "string", "nullable": true },
-                      "lastName": { "type": "string", "nullable": true },
-                      "statsSubscribed": { "type": "boolean" },
-                      "marketplaceSubscribed": { "type": "boolean" },
-                      "subscribed": { "type": "boolean" },
-                      "subscriptionDate": { "type": "string", "format": "date-time", "nullable": true }
+                  "type": "object",
+                  "properties": {
+                    "total": { "type": "integer" },
+                    "page": { "type": "integer" },
+                    "limit": { "type": "integer" },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "string" },
+                          "email": { "type": "string" },
+                          "firstName": { "type": "string", "nullable": true },
+                          "lastName": { "type": "string", "nullable": true },
+                          "statsSubscribed": { "type": "boolean" },
+                          "marketplaceSubscribed": { "type": "boolean" },
+                          "subscribed": { "type": "boolean" },
+                          "subscriptionDate": { "type": "string", "format": "date-time", "nullable": true }
+                        }
+                      }
                     }
                   }
                 }

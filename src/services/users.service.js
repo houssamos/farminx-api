@@ -26,9 +26,9 @@ exports.isAdmin = async (userId) => {
   return user?.role === 'admin';
 };
 
-exports.listUsersWithNotifications = async () => {
-  const rows = await usersRepository.listAllWithNotifications();
-  return rows.map(({ user, notification }) => {
+exports.listUsersWithNotifications = async ({ page = 1, limit = 50 } = {}) => {
+  const { rows, total } = await usersRepository.listAllWithNotifications({ page, limit });
+  const data = rows.map(({ user, notification }) => {
     const statsSubscribed = Boolean(notification?.stats);
     const marketplaceSubscribed = Boolean(notification?.marketplace);
 
@@ -43,6 +43,8 @@ exports.listUsersWithNotifications = async () => {
       subscriptionDate: notification?.created_at,
     };
   });
+
+  return { total, page, limit, data };
 };
 
 exports.countUsers = async () => {

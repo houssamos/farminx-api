@@ -38,7 +38,7 @@ describe('GET /v1/users', () => {
     expect(res.status).toBe(403);
   });
 
-  test('returns subscription data for admin', async () => {
+  test('returns subscription data for admin with pagination', async () => {
     usersRepository.findById.mockResolvedValue(
       new UserEntity({
         id: 'a1',
@@ -50,40 +50,51 @@ describe('GET /v1/users', () => {
         created_at: new Date(),
       })
     );
-    usersRepository.listAllWithNotifications.mockResolvedValue([
-      {
-        user: new UserEntity({
+    usersRepository.listAllWithNotifications.mockResolvedValue({
+      rows: [
+        {
+          user: new UserEntity({
+            id: 'u2',
+            email: 'user2@test.com',
+            password_hash: 'hash',
+            first_name: 'Jane',
+            last_name: 'Doe',
+            role: 'user',
+            created_at: new Date('2024-01-01T00:00:00Z'),
+          }),
+          notification: new NotificationEntity({
+            id: 'n1',
+            user_id: 'u2',
+            stats: true,
+            marketplace: false,
+            created_at: new Date('2024-06-01T00:00:00Z'),
+          }),
+        },
+      ],
+      total: 1,
+    });
+    const token = jwt.sign({ id: 'a1' }, process.env.JWT_SECRET);
+    const res = await request(app)
+      .get('/v1/users?page=2&limit=1')
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.status).toBe(200);
+    expect(usersRepository.listAllWithNotifications).toHaveBeenCalledWith({ page: 2, limit: 1 });
+    expect(res.body).toEqual({
+      total: 1,
+      page: 2,
+      limit: 1,
+      data: [
+        {
           id: 'u2',
           email: 'user2@test.com',
-          password_hash: 'hash',
-          first_name: 'Jane',
-          last_name: 'Doe',
-          role: 'user',
-          created_at: new Date('2024-01-01T00:00:00Z'),
-        }),
-        notification: new NotificationEntity({
-          id: 'n1',
-          user_id: 'u2',
-          stats: true,
-          marketplace: false,
-          created_at: new Date('2024-06-01T00:00:00Z'),
-        }),
-      },
-    ]);
-    const token = jwt.sign({ id: 'a1' }, process.env.JWT_SECRET);
-    const res = await request(app).get('/v1/users').set('Authorization', `Bearer ${token}`);
-    expect(res.status).toBe(200);
-    expect(res.body).toEqual([
-      {
-        id: 'u2',
-        email: 'user2@test.com',
-        firstName: 'Jane',
-        lastName: 'Doe',
-        statsSubscribed: true,
-        marketplaceSubscribed: false,
-        subscribed: true,
-        subscriptionDate: '2024-06-01T00:00:00.000Z',
-      },
-    ]);
+          firstName: 'Jane',
+          lastName: 'Doe',
+          statsSubscribed: true,
+          marketplaceSubscribed: false,
+          subscribed: true,
+          subscriptionDate: '2024-06-01T00:00:00.000Z',
+        },
+      ],
+    });
   });
 });

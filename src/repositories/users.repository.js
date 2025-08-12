@@ -23,12 +23,24 @@ exports.countAll = async () => {
   return prisma.users.count();
 };
 
-exports.listAllWithNotifications = async () => {
-  const rows = await prisma.users.findMany({ include: { notifications: true } });
-  return rows.map((row) => ({
-    user: new UserEntity(row),
-    notification: row.notifications ? new NotificationEntity(row.notifications) : null,
-  }));
+exports.listAllWithNotifications = async ({ page = 1, limit = 50 } = {}) => {
+  const [rows, total] = await Promise.all([
+    prisma.users.findMany({
+      include: { notifications: true },
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: { created_at: "desc" },
+    }),
+    prisma.users.count(),
+  ]);
+
+  return {
+    rows: rows.map((row) => ({
+      user: new UserEntity(row),
+      notification: row.notifications ? new NotificationEntity(row.notifications) : null,
+    })),
+    total,
+  };
 };
 
 exports.listByIds = async (ids) => {
