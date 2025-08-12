@@ -26,6 +26,18 @@ exports.isAdmin = async (userId) => {
   return user?.role === 'admin';
 };
 
+exports.listUsersWithNotifications = async () => {
+  const rows = await usersRepository.listAllWithNotifications();
+  return rows.map(({ user, notification }) => ({
+    id: user.id,
+    email: user.email,
+    firstName: user.first_name,
+    lastName: user.last_name,
+    subscribed: Boolean(notification?.stats || notification?.marketplace),
+    subscriptionDate: notification?.created_at,
+  }));
+};
+
 exports.countUsers = async () => {
   return usersRepository.countAll();
 };
