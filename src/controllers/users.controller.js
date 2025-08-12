@@ -9,3 +9,13 @@ exports.count = async (req, res) => {
     res.status(500).json({ error: "Erreur lors du comptage des utilisateurs" });
   }
 };
+
+exports.list = async (req, res) => {
+  try {
+    const users = await usersService.listUsersWithNotifications();
+    res.json(users);
+  } catch (err) {
+    console.error('Erreur list users:', err);
+    res.status(500).json({ error: 'Erreur lors de la récupération des utilisateurs' });
+  }
+};

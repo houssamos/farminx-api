@@ -5,5 +5,37 @@
     "version": "2.0.0",
     "description": "Specification en cours de préparation."
   },
-  "paths": {}
+  "paths": {
+    "/users": {
+      "get": {
+        "summary": "Liste des utilisateurs",
+        "tags": [
+          "Users"
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des utilisateurs avec statut d'abonnement",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "email": { "type": "string" },
+                      "firstName": { "type": "string", "nullable": true },
+                      "lastName": { "type": "string", "nullable": true },
+                      "subscribed": { "type": "boolean" },
+                      "subscriptionDate": { "type": "string", "format": "date-time", "nullable": true }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

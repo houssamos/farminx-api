@@ -1,5 +1,6 @@
 const prisma = require('../config/prisma');
 const UserEntity = require('../entities/user.entity');
+const NotificationEntity = require('../entities/notification.entity');
 
 exports.findByEmail = async (email) => {
   const row = await prisma.users.findUnique({ where: { email } });
@@ -20,6 +21,14 @@ exports.findById = async (id) => {
 
 exports.countAll = async () => {
   return prisma.users.count();
+};
+
+exports.listAllWithNotifications = async () => {
+  const rows = await prisma.users.findMany({ include: { notifications: true } });
+  return rows.map((row) => ({
+    user: new UserEntity(row),
+    notification: row.notifications ? new NotificationEntity(row.notifications) : null,
+  }));
 };
 
 exports.listByIds = async (ids) => {
