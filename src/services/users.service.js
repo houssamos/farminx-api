@@ -37,6 +37,7 @@ exports.listUsersWithNotifications = async ({ page = 1, limit = 50 } = {}) => {
       email: user.email,
       firstName: user.first_name,
       lastName: user.last_name,
+      role: user.role,
       statsSubscribed,
       marketplaceSubscribed,
       subscribed: statsSubscribed || marketplaceSubscribed,

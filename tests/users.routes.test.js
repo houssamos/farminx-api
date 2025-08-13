@@ -89,6 +89,7 @@ describe('GET /v1/users', () => {
           email: 'user2@test.com',
           firstName: 'Jane',
           lastName: 'Doe',
+          role: 'user',
           statsSubscribed: true,
           marketplaceSubscribed: false,
           subscribed: true,
@@ -96,5 +97,6 @@ describe('GET /v1/users', () => {
         },
       ],
     });
+    expect(res.body.data[0].role).toBe('user');
   });
 });

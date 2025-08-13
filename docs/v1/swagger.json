@@ -829,6 +829,7 @@
                           "email": { "type": "string" },
                           "firstName": { "type": "string", "nullable": true },
                           "lastName": { "type": "string", "nullable": true },
+                          "role": { "type": "string", "description": "Rôle de l'utilisateur" },
                           "statsSubscribed": { "type": "boolean" },
                           "marketplaceSubscribed": { "type": "boolean" },
                           "subscribed": { "type": "boolean" },
