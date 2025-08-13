@@ -19,6 +19,11 @@ exports.findById = async (id) => {
   return row ? new UserEntity(row) : null;
 };
 
+exports.deleteById = async (id) => {
+  const row = await prisma.users.delete({ where: { id } });
+  return row ? new UserEntity(row) : null;
+};
+
 exports.countAll = async () => {
   return prisma.users.count();
 };

@@ -100,3 +100,75 @@ describe('GET /v1/users', () => {
     expect(res.body.data[0].role).toBe('user');
   });
 });
+
+describe('DELETE /v1/users/:id', () => {
+  test('requires admin role', async () => {
+    usersRepository.findById.mockResolvedValue(
+      new UserEntity({
+        id: 'u1',
+        email: 'user@test.com',
+        password_hash: 'hash',
+        first_name: 'User',
+        last_name: 'Test',
+        role: 'user',
+        created_at: new Date(),
+      })
+    );
+    const token = jwt.sign({ id: 'u1' }, process.env.JWT_SECRET);
+    const res = await request(app)
+      .delete('/v1/users/u2')
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.status).toBe(403);
+  });
+
+  test('returns 204 when user deleted', async () => {
+    usersRepository.findById.mockResolvedValue(
+      new UserEntity({
+        id: 'a1',
+        email: 'admin@test.com',
+        password_hash: 'hash',
+        first_name: 'Admin',
+        last_name: 'Test',
+        role: 'admin',
+        created_at: new Date(),
+      })
+    );
+    usersRepository.deleteById.mockResolvedValue(
+      new UserEntity({
+        id: 'u2',
+        email: 'user2@test.com',
+        password_hash: 'hash',
+        first_name: 'Jane',
+        last_name: 'Doe',
+        role: 'user',
+        created_at: new Date(),
+      })
+    );
+    const token = jwt.sign({ id: 'a1' }, process.env.JWT_SECRET);
+    const res = await request(app)
+      .delete('/v1/users/u2')
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.status).toBe(204);
+    expect(usersRepository.deleteById).toHaveBeenCalledWith('u2');
+  });
+
+  test('returns 404 when user not found', async () => {
+    usersRepository.findById.mockResolvedValue(
+      new UserEntity({
+        id: 'a1',
+        email: 'admin@test.com',
+        password_hash: 'hash',
+        first_name: 'Admin',
+        last_name: 'Test',
+        role: 'admin',
+        created_at: new Date(),
+      })
+    );
+    usersRepository.deleteById.mockRejectedValue({ code: 'P2025' });
+    const token = jwt.sign({ id: 'a1' }, process.env.JWT_SECRET);
+    const res = await request(app)
+      .delete('/v1/users/u2')
+      .set('Authorization', `Bearer ${token}`);
+    expect(res.status).toBe(404);
+  });
+});

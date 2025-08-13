@@ -845,6 +845,27 @@
         }
       }
     },
+    "/users/{id}": {
+      "delete": {
+        "summary": "Supprimer un utilisateur",
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string", "format": "uuid" },
+            "description": "ID de l'utilisateur à supprimer"
+          }
+        ],
+        "responses": {
+          "204": { "description": "Utilisateur supprimé" },
+          "404": { "description": "Utilisateur non trouvé" }
+        }
+      }
+    },
     "/users/count": {
       "get": {
         "summary": "Nombre total d'utilisateurs",

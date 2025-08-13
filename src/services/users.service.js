@@ -21,6 +21,16 @@ exports.getById = async (id) => {
   return entityToModel(user);
 };
 
+exports.deleteUser = async (id) => {
+  try {
+    const entity = await usersRepository.deleteById(id);
+    return entityToModel(entity);
+  } catch (err) {
+    if (err.code === 'P2025') return null;
+    throw err;
+  }
+};
+
 exports.isAdmin = async (userId) => {
   const user = await usersRepository.findById(userId);
   return user?.role === 'admin';
