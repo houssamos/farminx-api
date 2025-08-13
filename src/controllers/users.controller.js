@@ -21,3 +21,15 @@ exports.list = async (req, res) => {
     res.status(500).json({ error: 'Erreur lors de la récupération des utilisateurs' });
   }
 };
+
+exports.remove = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleted = await usersService.deleteUser(id);
+    if (!deleted) return res.status(404).json({ error: "Utilisateur non trouvé" });
+    res.status(204).send();
+  } catch (err) {
+    console.error('Erreur suppression user:', err);
+    res.status(500).json({ error: "Erreur lors de la suppression de l'utilisateur" });
+  }
+};

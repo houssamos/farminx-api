@@ -6,5 +6,6 @@ const adminOnly = require("../../middlewares/role-admin-only");
 
 router.get("/", userAuth, adminOnly(), usersController.list);
 router.get("/count", userAuth, adminOnly(), usersController.count);
+router.delete("/:id", userAuth, adminOnly(), usersController.remove);
 
 module.exports = router;
