@@ -72,6 +72,22 @@
             "bearerAuth": []
           }
         ],
+        "parameters": [
+          {
+            "name": "stats",
+            "in": "query",
+            "schema": { "type": "boolean" },
+            "required": false,
+            "description": "Send to stats subscribers when true. At least one of stats or marketplace must be true."
+          },
+          {
+            "name": "marketplace",
+            "in": "query",
+            "schema": { "type": "boolean" },
+            "required": false,
+            "description": "Send to marketplace subscribers when true. At least one of stats or marketplace must be true."
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
