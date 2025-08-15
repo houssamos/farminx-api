@@ -24,8 +24,12 @@ exports.get = async (req, res) => {
 
 exports.adminSend = async (req, res) => {
   try {
-    const { stats = false, marketplace = false, subject, body } = req.body || {};
-    const emails = await emailService.getSubscribedEmails({ stats, marketplace });
+    const { subject, body } = req.body || {};
+    const { stats, marketplace } = req.query || {};
+    const emails = await emailService.getSubscribedEmails({
+      stats: stats === 'true',
+      marketplace: marketplace === 'true'
+    });
     const result = await emailService.sendBulkEmail(emails, subject, body);
     res.json(result);
   } catch (err) {
