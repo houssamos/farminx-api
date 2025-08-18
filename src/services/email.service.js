@@ -10,15 +10,14 @@ exports.getSubscribedEmails = async ({ stats = false, marketplace = false }) => 
 };
 
 const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
-  port: process.env.EMAIL_PORT,
-  secure: process.env.EMAIL_SECURE === 'true',
-  auth: process.env.EMAIL_USER
-    ? {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
-      }
-    : undefined,
+  service: 'gmail',
+  auth: {
+    type: 'OAuth2',
+    user: process.env.EMAIL_USER,
+    clientId: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
+  },
 });
 
 exports.sendBulkEmail = async (addresses, subject, body) => {
@@ -26,7 +25,7 @@ exports.sendBulkEmail = async (addresses, subject, body) => {
   for (const addr of addresses) {
     try {
       await transporter.sendMail({
-        from: process.env.EMAIL_FROM,
+        from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
         to: addr,
         subject,
         text: body,
