@@ -67,5 +67,22 @@ describe('email.service', () => {
       html: '<p>body</p>',
     });
   });
+
+  test('buildStatsAvailableEmail returns subject, text and html', () => {
+    const emailService = require('../src/services/email.service');
+    const { subject, text, html } = emailService.buildStatsAvailableEmail(
+      'http://example.com/stats',
+      ['blé', 'maïs'],
+      2023,
+    );
+
+    expect(subject).toBe('Nouvelles statistiques disponibles');
+    expect(text).toBe(
+      'Les statistiques pour blé, maïs 2023 sont disponibles : http://example.com/stats'
+    );
+    expect(html).toContain('<h1>Statistiques disponibles</h1>');
+    expect(html).toContain('blé, maïs 2023');
+    expect(html).toContain('<a href="http://example.com/stats"');
+  });
 });
 
