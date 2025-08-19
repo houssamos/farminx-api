@@ -8,13 +8,22 @@ exports.authenticate = async (email, password) => {
   if (!user) return null;
   const match = await bcrypt.compare(password, user.password_hash);
   if (!match) return null;
+  if (!user.email_verified) return { emailNotVerified: true };
   return entityToModel(user);
 };
 
 exports.createUser = async ({ email, password, firstName, lastName, role = 'user' }) => {
   const passwordHash = await bcrypt.hash(password, 15);
-  const entity = await usersRepository.createUser({ email, passwordHash, firstName, lastName, role });
-  return entityToModel(entity);
+  const verificationToken = cryptoLib.randomBytes(32).toString('hex');
+  const entity = await usersRepository.createUser({
+    email,
+    passwordHash,
+    firstName,
+    lastName,
+    role,
+    verificationToken,
+  });
+  return { user: entityToModel(entity), verificationToken };
 };
 
 exports.getById = async (id) => {
@@ -89,5 +98,12 @@ exports.resetPassword = async (token, newPassword) => {
   const passwordHash = await bcrypt.hash(newPassword, 15);
   await usersRepository.updatePassword(user.id, passwordHash);
   await usersRepository.clearPasswordResetToken(user.id);
+  return true;
+};
+
+exports.verifyEmail = async (token) => {
+  const user = await usersRepository.findByVerificationToken(token);
+  if (!user) return false;
+  await usersRepository.markEmailVerified(user.id);
   return true;
 };

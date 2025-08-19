@@ -8,6 +8,8 @@ exports.login = async (req, res) => {
   if (!email || !password) return res.status(400).json({ error: 'Email et mot de passe requis' });
   try {
     const user = await usersService.authenticate(email, password);
+    if (user?.emailNotVerified)
+      return res.status(403).json({ error: 'Email non vérifié' });
     if (!user) return res.status(401).json({ error: 'Identifiants invalides' });
     const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
     res.json(tokenToLoginResponseDto(token));
@@ -20,7 +22,13 @@ exports.register = async (req, res) => {
   const { email, password, firstName, lastName } = req.body;
   if (!email || !password) return res.status(400).json({ error: 'Email et mot de passe requis' });
   try {
-    const user = await usersService.createUser({ email, password, firstName, lastName });
+    const { user, verificationToken } = await usersService.createUser({
+      email,
+      password,
+      firstName,
+      lastName,
+    });
+    await emailService.sendVerificationEmail(email, verificationToken);
     res.status(201).json(userModelToRegisterResponseDto(user));
   } catch {
     res.status(500).json({ error: "Erreur lors de la création de l'utilisateur" });
@@ -75,5 +83,17 @@ exports.resetPassword = async (req, res) => {
     return res.sendStatus(204);
   } catch {
     return res.status(500).json({ error: 'Erreur lors de la réinitialisation du mot de passe' });
+  }
+};
+
+exports.verifyEmail = async (req, res) => {
+  const { token } = req.body;
+  if (!token) return res.status(400).json({ error: 'Token requis' });
+  try {
+    const ok = await usersService.verifyEmail(token);
+    if (!ok) return res.status(400).json({ error: 'Token invalide' });
+    return res.sendStatus(204);
+  } catch {
+    return res.status(500).json({ error: 'Erreur lors de la vérification de l\'email' });
   }
 };

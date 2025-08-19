@@ -70,6 +70,8 @@ model users {
   last_name     String?
   role          String  @default("user")
   created_at    DateTime @default(now())
+  email_verified Boolean @default(false)
+  verification_token String?
   password_reset_token String?
   password_reset_expires DateTime?
   announcements announcements[]
