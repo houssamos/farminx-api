@@ -61,3 +61,24 @@ exports.listByIds = async (ids) => {
   const rows = await prisma.users.findMany({ where: { id: { in: ids } } });
   return rows.map((row) => new UserEntity(row));
 };
+
+exports.savePasswordResetToken = async (id, token, expires) => {
+  const row = await prisma.users.update({
+    where: { id },
+    data: { password_reset_token: token, password_reset_expires: expires },
+  });
+  return row ? new UserEntity(row) : null;
+};
+
+exports.findByPasswordResetToken = async (token) => {
+  const row = await prisma.users.findFirst({ where: { password_reset_token: token } });
+  return row ? new UserEntity(row) : null;
+};
+
+exports.clearPasswordResetToken = async (id) => {
+  const row = await prisma.users.update({
+    where: { id },
+    data: { password_reset_token: null, password_reset_expires: null },
+  });
+  return row ? new UserEntity(row) : null;
+};

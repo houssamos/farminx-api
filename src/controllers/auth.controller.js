@@ -1,4 +1,5 @@
 const usersService = require('../services/users.service');
+const emailService = require('../services/email.service');
 const jwt = require('jsonwebtoken');
 const { tokenToLoginResponseDto, userModelToRegisterResponseDto } = require('../mapping/user.mapping');
 
@@ -48,5 +49,31 @@ exports.changePassword = async (req, res) => {
     return res.sendStatus(204);
   } catch {
     return res.status(500).json({ error: 'Erreur lors du changement de mot de passe' });
+  }
+};
+
+exports.forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  if (!email) return res.status(400).json({ error: 'Email requis' });
+  try {
+    const result = await usersService.requestPasswordReset(email);
+    if (!result) return res.sendStatus(204);
+    await emailService.sendPasswordResetEmail(email, result.token);
+    return res.sendStatus(204);
+  } catch {
+    return res.status(500).json({ error: 'Erreur lors de la demande de réinitialisation' });
+  }
+};
+
+exports.resetPassword = async (req, res) => {
+  const { token, password } = req.body;
+  if (!token || !password) return res.status(400).json({ error: 'Token et mot de passe requis' });
+  if (password.length < 6) return res.status(400).json({ error: 'Nouveau mot de passe trop court' });
+  try {
+    const ok = await usersService.resetPassword(token, password);
+    if (!ok) return res.status(400).json({ error: 'Token invalide ou expiré' });
+    return res.sendStatus(204);
+  } catch {
+    return res.status(500).json({ error: 'Erreur lors de la réinitialisation du mot de passe' });
   }
 };

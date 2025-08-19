@@ -38,3 +38,12 @@ exports.sendBulkEmail = async (addresses, subject, body) => {
   }
   return result;
 };
+
+exports.sendPasswordResetEmail = async (email, token) => {
+  await transporter.sendMail({
+    from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+    to: email,
+    subject: 'Réinitialisation de mot de passe',
+    text: `Utilisez ce jeton pour réinitialiser votre mot de passe : ${token}`,
+  });
+};
