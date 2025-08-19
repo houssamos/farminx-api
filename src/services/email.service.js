@@ -20,7 +20,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-exports.sendBulkEmail = async (addresses, subject, body) => {
+exports.sendBulkEmail = async (addresses, subject, text, html = text) => {
   const result = { sent: [], failed: [] };
   for (const addr of addresses) {
     try {
@@ -28,7 +28,8 @@ exports.sendBulkEmail = async (addresses, subject, body) => {
         from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
         to: addr,
         subject,
-        text: body,
+        text,
+        html,
       });
       result.sent.push(addr);
     } catch (err) {
