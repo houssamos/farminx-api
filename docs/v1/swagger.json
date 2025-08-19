@@ -1131,13 +1131,18 @@
                     "type": "string"
                   },
                   "body": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "HTML content of the notification. For marketplace notifications include <a href=\"{{link}}\">{{name}}</a>."
                   }
                 },
                 "required": [
                   "subject",
                   "body"
                 ]
+              },
+              "example": {
+                "subject": "Nouvelle annonce",
+                "body": "<p>Nouvelle annonce sur le marketplace : <a href=\"{{link}}\">{{name}}</a></p>"
               }
             }
           }
