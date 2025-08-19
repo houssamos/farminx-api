@@ -9,6 +9,8 @@ class UserEntity {
     created_at,
     password_reset_token,
     password_reset_expires,
+    email_verified,
+    verification_token,
   }) {
     this.id = id;
     this.email = email;
@@ -19,6 +21,8 @@ class UserEntity {
     this.created_at = created_at;
     this.password_reset_token = password_reset_token;
     this.password_reset_expires = password_reset_expires;
+    this.email_verified = email_verified;
+    this.verification_token = verification_token;
   }
 }
 module.exports = UserEntity;

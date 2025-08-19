@@ -47,3 +47,12 @@ exports.sendPasswordResetEmail = async (email, token) => {
     text: `Utilisez ce jeton pour réinitialiser votre mot de passe : ${token}`,
   });
 };
+
+exports.sendVerificationEmail = async (email, token) => {
+  await transporter.sendMail({
+    from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+    to: email,
+    subject: 'Vérification de votre adresse email',
+    text: `Veuillez vérifier votre email avec ce jeton : ${token}`,
+  });
+};

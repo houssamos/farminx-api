@@ -492,13 +492,16 @@
           },
           "401": {
             "description": "Identifiants invalides"
+          },
+          "403": {
+            "description": "Email non vérifié"
           }
         }
       }
     },
     "/auth/register": {
       "post": {
-        "summary": "Créer un nouvel utilisateur",
+        "summary": "Créer un nouvel utilisateur (envoi d'un email de vérification)",
         "tags": [
           "Authentification"
         ],
@@ -703,6 +706,32 @@
           "400": {
             "description": "Token invalide ou requête invalide"
           }
+        }
+      }
+    },
+    "/auth/verify-email": {
+      "post": {
+        "summary": "Vérifier l'adresse email",
+        "tags": [
+          "Authentification"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["token"],
+                "properties": {
+                  "token": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": { "description": "Email vérifié" },
+          "400": { "description": "Token invalide ou manquant" }
         }
       }
     },

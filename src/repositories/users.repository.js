@@ -7,9 +7,17 @@ exports.findByEmail = async (email) => {
   return row ? new UserEntity(row) : null;
 };
 
-exports.createUser = async ({ email, passwordHash, firstName, lastName, role }) => {
+exports.createUser = async ({ email, passwordHash, firstName, lastName, role, verificationToken }) => {
   const row = await prisma.users.create({
-    data: { email, password_hash: passwordHash, first_name: firstName, last_name: lastName, role },
+    data: {
+      email,
+      password_hash: passwordHash,
+      first_name: firstName,
+      last_name: lastName,
+      role,
+      verification_token: verificationToken,
+      email_verified: false,
+    },
   });
   return new UserEntity(row);
 };
@@ -79,6 +87,19 @@ exports.clearPasswordResetToken = async (id) => {
   const row = await prisma.users.update({
     where: { id },
     data: { password_reset_token: null, password_reset_expires: null },
+  });
+  return row ? new UserEntity(row) : null;
+};
+
+exports.findByVerificationToken = async (token) => {
+  const row = await prisma.users.findFirst({ where: { verification_token: token } });
+  return row ? new UserEntity(row) : null;
+};
+
+exports.markEmailVerified = async (id) => {
+  const row = await prisma.users.update({
+    where: { id },
+    data: { email_verified: true, verification_token: null },
   });
   return row ? new UserEntity(row) : null;
 };
