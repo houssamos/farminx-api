@@ -35,3 +35,18 @@ exports.me = async (req, res) => {
     res.status(500).json({ error: "Erreur lors de la récupération de l'utilisateur" });
   }
 };
+
+exports.changePassword = async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  if (!oldPassword || !newPassword)
+    return res.status(400).json({ error: 'Ancien et nouveau mot de passe requis' });
+  if (newPassword.length < 6)
+    return res.status(400).json({ error: 'Nouveau mot de passe trop court' });
+  try {
+    const ok = await usersService.changePassword(req.user.id, oldPassword, newPassword);
+    if (!ok) return res.status(401).json({ error: 'Ancien mot de passe incorrect' });
+    return res.sendStatus(204);
+  } catch {
+    return res.status(500).json({ error: 'Erreur lors du changement de mot de passe' });
+  }
+};
