@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const usersRepository = require('../repositories/users.repository');
+const cryptoLib = require('crypto');
 const { entityToModel } = require('../mapping/user.mapping');
 
 exports.authenticate = async (email, password) => {
@@ -70,4 +71,23 @@ exports.listUsersWithNotifications = async ({ page = 1, limit = 50 } = {}) => {
 
 exports.countUsers = async () => {
   return usersRepository.countAll();
+};
+
+exports.requestPasswordReset = async (email) => {
+  const user = await usersRepository.findByEmail(email);
+  if (!user) return null;
+  const token = cryptoLib.randomBytes(32).toString('hex');
+  const expires = new Date(Date.now() + 3600 * 1000);
+  await usersRepository.savePasswordResetToken(user.id, token, expires);
+  return { user: entityToModel(user), token };
+};
+
+exports.resetPassword = async (token, newPassword) => {
+  const user = await usersRepository.findByPasswordResetToken(token);
+  if (!user) return false;
+  if (user.password_reset_expires && user.password_reset_expires < new Date()) return false;
+  const passwordHash = await bcrypt.hash(newPassword, 15);
+  await usersRepository.updatePassword(user.id, passwordHash);
+  await usersRepository.clearPasswordResetToken(user.id);
+  return true;
 };

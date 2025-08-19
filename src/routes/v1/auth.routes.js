@@ -10,6 +10,8 @@ router.post('/login', authController.login);
 router.post('/register', authController.register);
 router.get('/me', userAuth, authController.me);
 router.post('/change-password', userAuth, authController.changePassword);
+router.post('/forgot-password', authController.forgotPassword);
+router.post('/reset-password', authController.resetPassword);
 
 router.post('/login-app', appsController.loginApp);
 router.post('/register-app', universalAuth, adminOnly({ verifyInDb: true }), appsController.registerApp);
