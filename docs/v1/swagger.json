@@ -591,6 +591,48 @@
         }
       }
     },
+    "/auth/change-password": {
+      "post": {
+        "summary": "Changer le mot de passe",
+        "tags": [
+          "Authentification"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "oldPassword",
+                  "newPassword"
+                ],
+                "properties": {
+                  "oldPassword": {
+                    "type": "string"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "minLength": 6
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Mot de passe mis à jour"
+          },
+          "400": {
+            "description": "Requête invalide"
+          },
+          "401": {
+            "description": "Ancien mot de passe incorrect"
+          }
+        }
+      }
+    },
     "/auth/login-app": {
       "post": {
         "summary": "Connexion d'une application enregistrée",

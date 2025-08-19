@@ -24,6 +24,14 @@ exports.deleteById = async (id) => {
   return row ? new UserEntity(row) : null;
 };
 
+exports.updatePassword = async (id, passwordHash) => {
+  const row = await prisma.users.update({
+    where: { id },
+    data: { password_hash: passwordHash },
+  });
+  return row ? new UserEntity(row) : null;
+};
+
 exports.countAll = async () => {
   return prisma.users.count();
 };

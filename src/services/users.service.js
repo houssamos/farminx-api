@@ -36,6 +36,16 @@ exports.isAdmin = async (userId) => {
   return user?.role === 'admin';
 };
 
+exports.changePassword = async (id, oldPassword, newPassword) => {
+  const user = await usersRepository.findById(id);
+  if (!user) return false;
+  const match = await bcrypt.compare(oldPassword, user.password_hash);
+  if (!match) return false;
+  const passwordHash = await bcrypt.hash(newPassword, 15);
+  await usersRepository.updatePassword(id, passwordHash);
+  return true;
+};
+
 exports.listUsersWithNotifications = async ({ page = 1, limit = 50 } = {}) => {
   const { rows, total } = await usersRepository.listAllWithNotifications({ page, limit });
   const data = rows.map(({ user, notification }) => {
