@@ -57,3 +57,24 @@ exports.sendVerificationEmail = async (email, token) => {
     text: `Veuillez vérifier votre email avec ce jeton : ${token}`,
   });
 };
+
+/**
+ * Build the subject, plain text and HTML body for the email sent when new
+ * statistics are available.
+ *
+ * @param {string} statsUrl URL to the statistics page
+ * @param {string[]} cultures List of culture names
+ * @param {number|string} year Year of the statistics
+ * @returns {{subject: string, text: string, html: string}}
+ */
+exports.buildStatsAvailableEmail = (statsUrl, cultures, year) => {
+  const cultureList = Array.isArray(cultures) ? cultures.join(', ') : cultures;
+  const subject = 'Nouvelles statistiques disponibles';
+  const text = `Les statistiques pour ${cultureList} ${year} sont disponibles : ${statsUrl}`;
+  const html = `
+    <h1>Statistiques disponibles</h1>
+    <p>Les statistiques pour ${cultureList} ${year} sont maintenant disponibles.</p>
+    <p><a href="${statsUrl}">${statsUrl}</a></p>
+  `;
+  return { subject, text, html };
+};
