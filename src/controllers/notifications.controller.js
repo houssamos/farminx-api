@@ -24,13 +24,13 @@ exports.get = async (req, res) => {
 
 exports.adminSend = async (req, res) => {
   try {
-    const { subject, body } = req.body || {};
+    const { subject, body, html } = req.body || {};
     const { stats, marketplace } = req.query || {};
     const emails = await emailService.getSubscribedEmails({
       stats: stats === 'true',
       marketplace: marketplace === 'true'
     });
-    const result = await emailService.sendBulkEmail(emails, subject, body);
+    const result = await emailService.sendBulkEmail(emails, subject, body, html);
     res.json(result);
   } catch (err) {
     console.error('Erreur envoi notifications admin:', err);

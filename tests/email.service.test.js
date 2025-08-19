@@ -38,13 +38,14 @@ describe('email.service', () => {
 
     const emailService = require('../src/services/email.service');
 
-    await emailService.sendBulkEmail(['a@test.com'], 'subject', 'body');
+    await emailService.sendBulkEmail(['a@test.com'], 'subject', 'body', '<p>body</p>');
 
     expect(sendMail).toHaveBeenCalledWith({
       from: process.env.EMAIL_USER,
       to: 'a@test.com',
       subject: 'subject',
       text: 'body',
+      html: '<p>body</p>',
     });
   });
 
@@ -56,13 +57,14 @@ describe('email.service', () => {
 
     const emailService = require('../src/services/email.service');
 
-    await emailService.sendBulkEmail(['a@test.com'], 'subject', 'body');
+    await emailService.sendBulkEmail(['a@test.com'], 'subject', 'body', '<p>body</p>');
 
     expect(sendMail).toHaveBeenCalledWith({
       from: process.env.EMAIL_FROM,
       to: 'a@test.com',
       subject: 'subject',
       text: 'body',
+      html: '<p>body</p>',
     });
   });
 });
