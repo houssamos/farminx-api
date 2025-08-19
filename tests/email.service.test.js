@@ -68,6 +68,30 @@ describe('email.service', () => {
     });
   });
 
+  test('sendBulkEmail forwards HTML to the transporter', async () => {
+    process.env.EMAIL_USER = 'user@gmail.com';
+    delete process.env.EMAIL_FROM;
+    const sendMail = jest.fn().mockResolvedValue();
+    nodemailer.createTransport.mockReturnValue({ sendMail });
+
+    const emailService = require('../src/services/email.service');
+
+    await emailService.sendBulkEmail(
+      ['a@test.com'],
+      'subject',
+      'plain body',
+      '<strong>HTML body</strong>',
+    );
+
+    expect(sendMail).toHaveBeenCalledWith({
+      from: process.env.EMAIL_USER,
+      to: 'a@test.com',
+      subject: 'subject',
+      text: 'plain body',
+      html: '<strong>HTML body</strong>',
+    });
+  });
+
   test('buildStatsAvailableEmail returns subject, text and html', () => {
     const emailService = require('../src/services/email.service');
     const { subject, text, html } = emailService.buildStatsAvailableEmail(
@@ -81,8 +105,12 @@ describe('email.service', () => {
       'Les statistiques pour blé, maïs 2023 sont disponibles : http://example.com/stats'
     );
     expect(html).toContain('<h1>Statistiques disponibles</h1>');
-    expect(html).toContain('blé, maïs 2023');
-    expect(html).toContain('<a href="http://example.com/stats"');
+    expect(html).toContain(
+      '<p>Les statistiques pour blé, maïs 2023 sont maintenant disponibles.</p>',
+    );
+    expect(html).toContain(
+      '<p><a href="http://example.com/stats">http://example.com/stats</a></p>',
+    );
   });
 });
 
