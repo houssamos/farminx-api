@@ -19,8 +19,8 @@ async function notify(req, res) {
 
   try {
     const recipients = audience || emails;
-    await sendNotification(type, recipients, data);
-    return res.status(200).json({ message: 'Notification sent' });
+    const { sent, skipped } = await sendNotification(type, recipients, data);
+    return res.status(200).json({ message: 'Notification sent', sent, skipped });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

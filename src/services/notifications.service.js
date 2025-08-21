@@ -1,5 +1,5 @@
 const path = require('path');
-const { sendMail } = require('../utils/mailer');
+const { sendTemplatedEmail } = require('../utils/mailer');
 
 const templates = {
   stats: {
@@ -38,7 +38,7 @@ async function sendNotification(type, to, data) {
     throw new Error(`Unknown notification type: ${type}`);
   }
   const recipients = resolveRecipients(to);
-  await sendMail(recipients, template.subject, template.path, data);
+  return sendTemplatedEmail(recipients, template.subject, template.path, data);
 }
 
 module.exports = { sendNotification };
