@@ -78,3 +78,13 @@ exports.buildStatsAvailableEmail = (statsUrl, cultures, year) => {
   `;
   return { subject, text, html };
 };
+
+exports.sendHtmlNotification = async ({ to, type, subject, variables = {} }) => {
+  const html = variables.html || '';
+  await transporter.sendMail({
+    from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
+    to,
+    subject,
+    html,
+  });
+};
