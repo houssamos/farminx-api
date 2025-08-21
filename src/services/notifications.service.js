@@ -16,12 +16,29 @@ const templates = {
   },
 };
 
+function resolveRecipients(to) {
+  const recipients = Array.isArray(to) ? to : [to];
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const unique = new Set();
+
+  for (const email of recipients) {
+    const trimmed = typeof email === 'string' ? email.trim() : '';
+    if (!emailRegex.test(trimmed)) {
+      throw new Error(`Invalid email address: ${email}`);
+    }
+    unique.add(trimmed);
+  }
+
+  return Array.from(unique);
+}
+
 async function sendNotification(type, to, data) {
   const template = templates[type];
   if (!template) {
     throw new Error(`Unknown notification type: ${type}`);
   }
-  await sendMail(to, template.subject, template.path, data);
+  const recipients = resolveRecipients(to);
+  await sendMail(recipients, template.subject, template.path, data);
 }
 
 module.exports = { sendNotification };
