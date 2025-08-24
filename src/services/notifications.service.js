@@ -1,7 +1,7 @@
 const notificationsRepository = require('../repositories/notifications.repository');
 const { entityToModel } = require('../mapping/notification.mapping');
 const usersRepository = require('../repositories/users.repository');
-const emailService = require('./email.service');
+const mailer = require('../utils/mailer');
 
 exports.subscribe = async (userId, { stats = false, marketplace = false }) => {
   const entity = await notificationsRepository.upsert({ userId, stats, marketplace });
@@ -26,11 +26,10 @@ exports.sendTemplatedEmail = async ({
 
   for (const addr of recipients) {
     try {
-      await emailService.sendHtmlNotification({
+      await mailer.sendMail({
         to: addr,
-        type,
         subject,
-        variables,
+        html: variables.html || '',
       });
       sent += 1;
     } catch (err) {
