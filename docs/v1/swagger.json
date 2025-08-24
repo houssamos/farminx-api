@@ -721,17 +721,25 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["token"],
+                "required": [
+                  "token"
+                ],
                 "properties": {
-                  "token": { "type": "string" }
+                  "token": {
+                    "type": "string"
+                  }
                 }
               }
             }
           }
         },
         "responses": {
-          "204": { "description": "Email vérifié" },
-          "400": { "description": "Token invalide ou manquant" }
+          "204": {
+            "description": "Email vérifié"
+          },
+          "400": {
+            "description": "Token invalide ou manquant"
+          }
         }
       }
     },
@@ -943,13 +951,19 @@
           {
             "name": "page",
             "in": "query",
-            "schema": { "type": "integer", "default": 1 },
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
             "description": "Numéro de page"
           },
           {
             "name": "limit",
             "in": "query",
-            "schema": { "type": "integer", "default": 50 },
+            "schema": {
+              "type": "integer",
+              "default": 50
+            },
             "description": "Nombre d'éléments par page"
           }
         ],
@@ -961,23 +975,52 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "total": { "type": "integer" },
-                    "page": { "type": "integer" },
-                    "limit": { "type": "integer" },
+                    "total": {
+                      "type": "integer"
+                    },
+                    "page": {
+                      "type": "integer"
+                    },
+                    "limit": {
+                      "type": "integer"
+                    },
                     "data": {
                       "type": "array",
                       "items": {
                         "type": "object",
                         "properties": {
-                          "id": { "type": "string" },
-                          "email": { "type": "string" },
-                          "firstName": { "type": "string", "nullable": true },
-                          "lastName": { "type": "string", "nullable": true },
-                          "role": { "type": "string", "description": "Rôle de l'utilisateur" },
-                          "statsSubscribed": { "type": "boolean" },
-                          "marketplaceSubscribed": { "type": "boolean" },
-                          "subscribed": { "type": "boolean" },
-                          "subscriptionDate": { "type": "string", "format": "date-time", "nullable": true }
+                          "id": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "firstName": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "lastName": {
+                            "type": "string",
+                            "nullable": true
+                          },
+                          "role": {
+                            "type": "string",
+                            "description": "Rôle de l'utilisateur"
+                          },
+                          "statsSubscribed": {
+                            "type": "boolean"
+                          },
+                          "marketplaceSubscribed": {
+                            "type": "boolean"
+                          },
+                          "subscribed": {
+                            "type": "boolean"
+                          },
+                          "subscriptionDate": {
+                            "type": "string",
+                            "format": "date-time",
+                            "nullable": true
+                          }
                         }
                       }
                     }
@@ -1000,13 +1043,20 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "format": "uuid" },
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
             "description": "ID de l'utilisateur à supprimer"
           }
         ],
         "responses": {
-          "204": { "description": "Utilisateur supprimé" },
-          "404": { "description": "Utilisateur non trouvé" }
+          "204": {
+            "description": "Utilisateur supprimé"
+          },
+          "404": {
+            "description": "Utilisateur non trouvé"
+          }
         }
       }
     },
@@ -1093,7 +1143,7 @@
         }
       }
     },
-    "/notifications/admin/send": {
+    "/notifications/send": {
       "post": {
         "summary": "Envoyer des notifications aux abonnés",
         "tags": [
@@ -1104,22 +1154,6 @@
             "bearerAuth": []
           }
         ],
-        "parameters": [
-          {
-            "name": "stats",
-            "in": "query",
-            "schema": { "type": "boolean" },
-            "required": false,
-            "description": "Send to stats subscribers when true. At least one of stats or marketplace must be true."
-          },
-          {
-            "name": "marketplace",
-            "in": "query",
-            "schema": { "type": "boolean" },
-            "required": false,
-            "description": "Send to marketplace subscribers when true. At least one of stats or marketplace must be true."
-          }
-        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -1127,22 +1161,35 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "subject": {
-                    "type": "string"
-                  },
-                  "body": {
+                  "type": {
                     "type": "string",
-                    "description": "HTML content of the notification. For marketplace notifications include <a href=\"{{link}}\">{{name}}</a>."
+                    "description": "Type de notification"
+                  },
+                  "subject": {
+                    "type": "string",
+                    "description": "Sujet du message"
+                  },
+                  "variables": {
+                    "type": "object",
+                    "description": "Variables pour le template"
+                  },
+                  "audience": {
+                    "type": "string",
+                    "description": "Audience ciblée"
+                  },
+                  "emails": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "email"
+                    },
+                    "description": "Emails spécifiques à notifier"
                   }
                 },
                 "required": [
-                  "subject",
-                  "body"
+                  "type",
+                  "subject"
                 ]
-              },
-              "example": {
-                "subject": "Nouvelle annonce",
-                "body": "<p>Nouvelle annonce sur le marketplace : <a href=\"{{link}}\">{{name}}</a></p>"
               }
             }
           }
@@ -1151,11 +1198,14 @@
           "200": {
             "description": "Notifications envoyées avec succès"
           },
+          "400": {
+            "description": "Requête invalide"
+          },
+          "401": {
+            "description": "Authentification requise"
+          },
           "403": {
             "description": "Non autorisé"
-          },
-          "500": {
-            "description": "Erreur serveur"
           }
         }
       }
