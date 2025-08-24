@@ -1,5 +1,4 @@
 const notificationsService = require('../services/notifications.service');
-const emailService = require('../services/email.service');
 
 exports.subscribe = async (req, res) => {
   try {
@@ -24,16 +23,30 @@ exports.get = async (req, res) => {
 
 exports.send = async (req, res) => {
   try {
-    const { subject, body, html } = req.body || {};
-    const { stats, marketplace } = req.query || {};
-    const emails = await emailService.getSubscribedEmails({
-      stats: stats === 'true',
-      marketplace: marketplace === 'true'
+    const { type, subject, product, year, link } = req.body || {};
+    if (!type || !subject) return res.status(400).json({ error: 'Type et sujet requis' });
+
+    if (type === 'stats') {
+      if (!product || !year || !link) {
+        return res.status(400).json({ error: 'Produit, année et lien requis' });
+      }
+    } else if (type === 'marketplace') {
+      if (!link) return res.status(400).json({ error: 'Lien requis' });
+    } else {
+      return res.status(400).json({ error: 'Type invalide' });
+    }
+
+    const { sent, skipped } = await notificationsService.sendTemplatedEmail({
+      type,
+      subject,
+      product,
+      year,
+      link,
     });
-    const result = await emailService.sendBulkEmail(emails, subject, body, html);
-    res.json(result);
+    res.json({ sent, skipped });
   } catch (err) {
     console.error('Erreur envoi notifications:', err);
     res.status(500).json({ error: "Erreur lors de l'envoi des notifications" });
   }
 };
+
