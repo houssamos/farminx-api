@@ -45,8 +45,8 @@ exports.send = async (req, res) => {
     });
     res.json({ sent, skipped });
   } catch (err) {
-    console.error('Erreur envoi notification:', err);
-    res.status(500).json({ error: "Erreur lors de l'envoi de la notification" });
+    console.error('Erreur envoi notifications:', err);
+    res.status(500).json({ error: "Erreur lors de l'envoi des notifications" });
   }
 };
 
