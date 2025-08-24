@@ -8,7 +8,7 @@ exports.authenticate = async (email, password) => {
   if (!user) return null;
   const match = await bcrypt.compare(password, user.password_hash);
   if (!match) return null;
-  if (!user.email_verified) return { emailNotVerified: true };
+  //if (user.email_verified) return { emailNotVerified: true };
   return entityToModel(user);
 };
 

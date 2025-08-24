@@ -33,14 +33,19 @@ exports.sendTemplatedEmail = async ({
   let sent = 0;
   let skipped = 0;
   const templatePath = TEMPLATES[type];
+  if (!templatePath) throw new Error('Template inconnu');
 
   for (const addr of recipients) {
+    //const vars = {
+    //  ...variables,
+    //  name: recepient.first_name || recepient.name || recepient.email.split('@')[0],
+    //};    
     try {
       await emailService.sendHtmlNotification({
         to: addr,
         subject,
         templatePath,
-        variables,
+        variables
       });
       sent += 1;
     } catch (err) {

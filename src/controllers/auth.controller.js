@@ -8,8 +8,9 @@ exports.login = async (req, res) => {
   if (!email || !password) return res.status(400).json({ error: 'Email et mot de passe requis' });
   try {
     const user = await usersService.authenticate(email, password);
-    if (user?.emailNotVerified)
-      return res.status(403).json({ error: 'Email non vérifié' });
+    //if (!user?.email_verified)
+    //  return res.status(403).json({ error: 'Email non vérifié' });
+    //TODO: send verification email again? à reflechir
     if (!user) return res.status(401).json({ error: 'Identifiants invalides' });
     const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
     res.json(tokenToLoginResponseDto(token));

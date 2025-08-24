@@ -23,15 +23,15 @@ exports.get = async (req, res) => {
 
 exports.send = async (req, res) => {
   try {
-    const { type, subject, product, year, link } = req.body || {};
+    const { type, subject, variables, audience, emails } = req.body || {};
     if (!type || !subject) return res.status(400).json({ error: 'Type et sujet requis' });
 
     if (type === 'stats') {
-      if (!product || !year || !link) {
+      if (!variables.product || !variables.year || !variables.link) {
         return res.status(400).json({ error: 'Produit, année et lien requis' });
       }
     } else if (type === 'marketplace') {
-      if (!link) return res.status(400).json({ error: 'Lien requis' });
+      if (!variables.link) return res.status(400).json({ error: 'Lien requis' });
     } else {
       return res.status(400).json({ error: 'Type invalide' });
     }
@@ -39,9 +39,9 @@ exports.send = async (req, res) => {
     const { sent, skipped } = await notificationsService.sendTemplatedEmail({
       type,
       subject,
-      product,
-      year,
-      link,
+      variables: {...variables},
+      audience,
+      emails,
     });
     res.json({ sent, skipped });
   } catch (err) {
