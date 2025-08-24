@@ -61,7 +61,7 @@
         }
       }
     },
-    "/notifications/admin/send": {
+    "/notifications/send": {
       "post": {
         "summary": "Envoyer des notifications aux abonnés",
         "tags": [

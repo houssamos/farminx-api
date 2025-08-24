@@ -22,7 +22,7 @@ exports.get = async (req, res) => {
   }
 };
 
-exports.adminSend = async (req, res) => {
+exports.send = async (req, res) => {
   try {
     const { subject, body, html } = req.body || {};
     const { stats, marketplace } = req.query || {};
@@ -33,7 +33,7 @@ exports.adminSend = async (req, res) => {
     const result = await emailService.sendBulkEmail(emails, subject, body, html);
     res.json(result);
   } catch (err) {
-    console.error('Erreur envoi notifications admin:', err);
+    console.error('Erreur envoi notifications:', err);
     res.status(500).json({ error: "Erreur lors de l'envoi des notifications" });
   }
 };

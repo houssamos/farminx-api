@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const notificationsController = require('../../controllers/notifications.controller');
 const userAuth = require('../../middlewares/user-auth.middleware');
+const universalAuth = require('../../middlewares/auth-universal.middleware');
 const roleAdminOnly = require('../../middlewares/role-admin-only');
 
 
@@ -11,6 +12,6 @@ router.get('/', userAuth, notificationsController.get);
 //   stats=true to email stats subscribers
 //   marketplace=true to email marketplace subscribers
 //   at least one must be true to send any emails
-router.post('/admin/send', userAuth, roleAdminOnly({ verifyInDb: false }), notificationsController.adminSend);
+router.post('/send', universalAuth, roleAdminOnly({ verifyInDb: true }), notificationsController.send);
 
 module.exports = router;
