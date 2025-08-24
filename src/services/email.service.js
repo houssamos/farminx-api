@@ -20,6 +20,8 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+exports.transporter = transporter;
+
 exports.sendBulkEmail = async (addresses, subject, text, html = text) => {
   const result = { sent: [], failed: [] };
   for (const addr of addresses) {
