@@ -1,5 +1,6 @@
 const request = require('supertest');
 const express = require('express');
+const path = require('path');
 
 describe('notificationsService.sendTemplatedEmail', () => {
   let notificationsService;
@@ -24,8 +25,11 @@ describe('notificationsService.sendTemplatedEmail', () => {
     });
     expect(emailService.sendHtmlNotification).toHaveBeenCalledWith({
       to: 'user@test.com',
-      type: 'stats',
       subject: 'Stats Update',
+      templatePath: path.join(
+        process.cwd(),
+        'src/templates/emails/statsTemplate.html',
+      ),
       variables: { product: 'Wheat', year: 2024, link: 'http://stats' },
     });
     expect(result).toEqual({ sent: 1, skipped: 0 });
@@ -41,8 +45,11 @@ describe('notificationsService.sendTemplatedEmail', () => {
     });
     expect(emailService.sendHtmlNotification).toHaveBeenCalledWith({
       to: 'user@test.com',
-      type: 'marketplace',
       subject: 'New Item',
+      templatePath: path.join(
+        process.cwd(),
+        'src/templates/emails/marketplaceTemplate.html',
+      ),
       variables: { name: 'Tractor', link: 'http://market' },
     });
     expect(result).toEqual({ sent: 1, skipped: 0 });

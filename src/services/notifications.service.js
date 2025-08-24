@@ -1,7 +1,16 @@
+const path = require('path');
 const notificationsRepository = require('../repositories/notifications.repository');
 const { entityToModel } = require('../mapping/notification.mapping');
 const usersRepository = require('../repositories/users.repository');
-const mailer = require('../utils/mailer');
+const emailService = require('./email.service');
+
+const TEMPLATES = {
+  stats: path.join(process.cwd(), 'src/templates/emails/statsTemplate.html'),
+  marketplace: path.join(
+    process.cwd(),
+    'src/templates/emails/marketplaceTemplate.html',
+  ),
+};
 
 exports.subscribe = async (userId, { stats = false, marketplace = false }) => {
   const entity = await notificationsRepository.upsert({ userId, stats, marketplace });
@@ -23,13 +32,15 @@ exports.sendTemplatedEmail = async ({
   const recipients = await resolveRecipients({ audience, emails });
   let sent = 0;
   let skipped = 0;
+  const templatePath = TEMPLATES[type];
 
   for (const addr of recipients) {
     try {
-      await mailer.sendMail({
+      await emailService.sendHtmlNotification({
         to: addr,
         subject,
-        html: variables.html || '',
+        templatePath,
+        variables,
       });
       sent += 1;
     } catch (err) {
