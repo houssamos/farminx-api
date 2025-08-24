@@ -1,27 +1,24 @@
-const fs = require('fs');
-const handlebars = require('handlebars');
-const { transporter } = require('../services/email.service');
+const nodemailer = require('nodemailer');
 
-/**
- * Sends an HTML email based on a Handlebars template.
- *
- * @param {Object} options
- * @param {string} options.to Recipient email address
- * @param {string} options.subject Email subject
- * @param {string} options.templatePath Path to the Handlebars template file
- * @param {Object} [options.variables={}] Variables to interpolate in the template
- */
-async function sendHtmlNotification({ to, subject, templatePath, variables = {} }) {
-  const templateSource = fs.readFileSync(templatePath, 'utf8');
-  const template = handlebars.compile(templateSource);
-  const html = template(variables);
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    type: 'OAuth2',
+    user: process.env.EMAIL_USER,
+    clientId: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
+  },
+});
 
+async function sendMail({ to, subject, text, html }) {
   await transporter.sendMail({
-    from: process.env.EMAIL_SENDER,
+    from: process.env.EMAIL_FROM || process.env.EMAIL_USER,
     to,
     subject,
+    text,
     html,
   });
 }
 
-module.exports = { sendHtmlNotification };
+module.exports = { sendMail };
