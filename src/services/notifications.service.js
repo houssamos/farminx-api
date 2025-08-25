@@ -35,21 +35,23 @@ exports.sendTemplatedEmail = async ({
   const templatePath = TEMPLATES[type];
   if (!templatePath) throw new Error('Template inconnu');
 
-  for (const addr of recipients) {
-    //const vars = {
-    //  ...variables,
-    //  name: recepient.first_name || recepient.name || recepient.email.split('@')[0],
-    //};    
+  for (const recipient of recipients) {
+    const nameParts = [];
+    if (recipient.first_name) nameParts.push(recipient.first_name);
+    if (recipient.last_name) nameParts.push(recipient.last_name);
+    const name =
+      nameParts.join(' ').trim() || recipient.name || recipient.email.split('@')[0];
+    const vars = { ...variables, name };
     try {
       await emailService.sendHtmlNotification({
-        to: addr,
+        to: recipient.email,
         subject,
         templatePath,
-        variables
+        variables: vars,
       });
       sent += 1;
     } catch (err) {
-      console.error('Erreur envoi notification vers', addr, err);
+      console.error('Erreur envoi notification vers', recipient.email, err);
       skipped += 1;
     }
   }
@@ -58,7 +60,13 @@ exports.sendTemplatedEmail = async ({
 };
 
 async function resolveRecipients({ audience, emails }) {
-  if (Array.isArray(emails) && emails.length) return emails;
+  if (Array.isArray(emails) && emails.length) {
+    return emails.map((e) =>
+      typeof e === 'string'
+        ? { email: e }
+        : e,
+    );
+  }
 
   const search = {
     stats: audience === 'stats',
@@ -69,5 +77,5 @@ async function resolveRecipients({ audience, emails }) {
   if (!userIds.length) return [];
 
   const users = await usersRepository.listByIds(userIds);
-  return users.map((u) => u.email);
+  return users;
 }

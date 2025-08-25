@@ -30,7 +30,7 @@ describe('notificationsService.sendTemplatedEmail', () => {
         process.cwd(),
         'src/templates/emails/statsTemplate.html',
       ),
-      variables: { product: 'Wheat', year: 2024, link: 'http://stats' },
+      variables: { product: 'Wheat', year: 2024, link: 'http://stats', name: 'user' },
     });
     expect(result).toEqual({ sent: 1, skipped: 0 });
   });
@@ -40,7 +40,7 @@ describe('notificationsService.sendTemplatedEmail', () => {
     const result = await notificationsService.sendTemplatedEmail({
       type: 'marketplace',
       subject: 'New Item',
-      variables: { name: 'Tractor', link: 'http://market' },
+      variables: { item: 'Tractor', link: 'http://market' },
       emails: ['user@test.com'],
     });
     expect(emailService.sendHtmlNotification).toHaveBeenCalledWith({
@@ -50,7 +50,7 @@ describe('notificationsService.sendTemplatedEmail', () => {
         process.cwd(),
         'src/templates/emails/marketplaceTemplate.html',
       ),
-      variables: { name: 'Tractor', link: 'http://market' },
+      variables: { item: 'Tractor', link: 'http://market', name: 'user' },
     });
     expect(result).toEqual({ sent: 1, skipped: 0 });
   });
@@ -101,7 +101,7 @@ describe('POST /v1/notifications/send validations', () => {
   test('requires product, year and link for stats', async () => {
     const res = await request(app)
       .post('/v1/notifications/send')
-      .send({ type: 'stats', subject: 'S', product: 'p', year: 2023 });
+      .send({ type: 'stats', subject: 'S', variables: { product: 'p', year: 2023 } });
     expect(res.status).toBe(400);
     expect(res.body).toEqual({ error: 'Produit, année et lien requis' });
   });
@@ -109,7 +109,7 @@ describe('POST /v1/notifications/send validations', () => {
   test('requires link for marketplace', async () => {
     const res = await request(app)
       .post('/v1/notifications/send')
-      .send({ type: 'marketplace', subject: 'S' });
+      .send({ type: 'marketplace', subject: 'S', variables: {} });
     expect(res.status).toBe(400);
     expect(res.body).toEqual({ error: 'Lien requis' });
   });
@@ -121,18 +121,14 @@ describe('POST /v1/notifications/send validations', () => {
       .send({
         type: 'stats',
         subject: 'S',
-        product: 'p',
-        year: 2023,
-        link: 'http://example.com',
+        variables: { product: 'p', year: 2023, link: 'http://example.com' },
       });
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ sent: 2, skipped: 1 });
     expect(notificationsService.sendTemplatedEmail).toHaveBeenCalledWith({
       type: 'stats',
       subject: 'S',
-      product: 'p',
-      year: 2023,
-      link: 'http://example.com',
+      variables: { product: 'p', year: 2023, link: 'http://example.com' },
     });
   });
 });
