@@ -1,8 +1,8 @@
 const request = require('supertest');
 const express = require('express');
+const path = require('path');
 
 jest.mock('../src/services/users.service');
-jest.mock('../src/services/email.service');
 jest.mock('../src/controllers/apps.controller', () => ({
   loginApp: jest.fn(),
   registerApp: jest.fn(),
@@ -11,6 +11,7 @@ jest.mock('../src/controllers/apps.controller', () => ({
 jest.mock('../src/middlewares/auth-universal.middleware', () => jest.fn((req, res, next) => next()));
 const usersService = require('../src/services/users.service');
 const emailService = require('../src/services/email.service');
+jest.spyOn(emailService, 'sendHtmlNotification').mockResolvedValue();
 const authRouter = require('../src/routes/v1/auth.routes');
 
 let app;
@@ -41,7 +42,13 @@ describe('POST /v1/auth/register', () => {
       firstName: undefined,
       lastName: undefined,
     });
-    expect(emailService.sendVerificationEmail).toHaveBeenCalledWith('a@a.com', 'tok');
+    const templatePath = path.join(
+      process.cwd(),
+      'src/templates/emails/emailVerificationTemplate.html',
+    );
+    expect(emailService.sendHtmlNotification).toHaveBeenCalledWith(
+      expect.objectContaining({ templatePath }),
+    );
   });
 });
 
