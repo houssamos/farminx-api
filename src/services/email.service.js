@@ -1,4 +1,5 @@
 const fs = require('fs/promises');
+const path = require('path');
 const { sendMail } = require('../utils/mailer');
 
 exports.sendPasswordResetEmail = async (email, token) => {
@@ -10,10 +11,12 @@ exports.sendPasswordResetEmail = async (email, token) => {
 };
 
 exports.sendVerificationEmail = async (email, token) => {
-  await sendMail({
+  const link = `https://example.com/verify-email?token=${token}`;
+  await exports.sendHtmlNotification({
     to: email,
     subject: 'Vérification de votre adresse email',
-    text: `Veuillez vérifier votre email avec ce jeton : ${token}`,
+    templatePath: path.join(__dirname, '../templates/emails/emailVerificationTemplate.html'),
+    variables: { name: email, link },
   });
 };
 
