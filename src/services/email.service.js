@@ -3,10 +3,12 @@ const path = require('path');
 const { sendMail } = require('../utils/mailer');
 
 exports.sendPasswordResetEmail = async (email, token) => {
-  await sendMail({
+  const link = `https://example.com/reset-password?token=${token}`;
+  await exports.sendHtmlNotification({
     to: email,
     subject: 'Réinitialisation de mot de passe',
-    text: `Utilisez ce jeton pour réinitialiser votre mot de passe : ${token}`,
+    templatePath: path.join(__dirname, '../templates/emails/passwordResetTemplate.html'),
+    variables: { name: email, link },
   });
 };
 
