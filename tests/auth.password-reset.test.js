@@ -1,8 +1,8 @@
 const request = require('supertest');
 const express = require('express');
+const path = require('path');
 
 jest.mock('../src/services/users.service');
-jest.mock('../src/services/email.service');
 jest.mock('../src/controllers/apps.controller', () => ({
   loginApp: jest.fn(),
   registerApp: jest.fn(),
@@ -11,6 +11,7 @@ jest.mock('../src/controllers/apps.controller', () => ({
 jest.mock('../src/middlewares/auth-universal.middleware', () => jest.fn((req, res, next) => next()));
 const usersService = require('../src/services/users.service');
 const emailService = require('../src/services/email.service');
+jest.spyOn(emailService, 'sendHtmlNotification').mockResolvedValue();
 const authRouter = require('../src/routes/v1/auth.routes');
 
 let app;
@@ -31,7 +32,13 @@ describe('POST /v1/auth/forgot-password', () => {
     const res = await request(app).post('/v1/auth/forgot-password').send({ email: 'a@a.com' });
     expect(res.status).toBe(204);
     expect(usersService.requestPasswordReset).toHaveBeenCalledWith('a@a.com');
-    expect(emailService.sendPasswordResetEmail).toHaveBeenCalledWith('a@a.com', 'tok');
+    const templatePath = path.join(
+      process.cwd(),
+      'src/templates/emails/passwordResetTemplate.html',
+    );
+    expect(emailService.sendHtmlNotification).toHaveBeenCalledWith(
+      expect.objectContaining({ templatePath }),
+    );
   });
 
   test('returns 400 when email missing', async () => {
